@@ -1,0 +1,66 @@
+ .dataclr-1 {
+     background-color: #b9b8b8;
+ }
+
+ .dataclr-2 {
+     background-color: #fad3d3;
+ }
+
+ .dataclr-3 {
+     background-color: #92baf5;
+ }
+
+ .idea-ref div {
+     background-color: #e4e9c7;
+ }
+
+ .flushKey {
+     cursor: pointer;
+ }
+
+ .ranked {
+     cursor: help;
+ }
+
+ h1 {
+     font-family: 'Stick';
+ }
+
+ .imgSmallType1 {
+
+     position: absolute;
+     left: 1px;
+     width: 16px;
+     height: 16px;
+ }
+
+ .imgClassic {
+     left: 18px;
+ }
+
+ .card-img-overlay {
+     top: -1em;
+     left: 0px;
+ }
+
+ .invisible {
+     visibility: hidden;
+ }
+
+ .grayScale {
+     filter: grayscale(100%);
+     filter: opacity(40%);
+ }
+
+ .containerExt {
+     cursor: default;
+     user-select: none;
+ }
+
+ .icon{
+    height:48px;
+ }
+
+ .carditem{
+    filter: opacity(40%);
+ }

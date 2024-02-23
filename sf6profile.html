@@ -1,0 +1,282 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StreetFighter6 Profile Maker</title>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- jQuery-ui -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+        media="all" />
+
+    <!-- BootStrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!-- web font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Stick&display=swap" rel="stylesheet">
+
+    <script defer type="text/javascript" src="js/chardata.json.js"></script>
+
+    <!--
+    <script id="_CACHE_BUSTER_" src="js/cache-busting.js" charset="utf-8"></script>
+  -->
+
+    <link rel="stylesheet" href="css/main.css?20240221-1">
+    <script type="text/javascript" src="js/listupIdea.js?20240221-1"></script>
+</head>
+
+<body>
+    <h1 class="shadow text-center border border-success rounded  p-1 m-1 fw-bold">StreetFighter6 Profile Maker</h1>
+
+    <div id="sfprofile"></div>
+
+    <div id="gen" class="btn-primary m-2 rounded text-center">click</div>
+    <div id="ProfileCardMain"></div>
+    <script defer type="text/javascript">
+        $(function () {
+            $('#sfprofile').sfProfile();
+        });
+    </script>
+
+    <!--
+    <div class="container-lg">
+        <div class="row border border-success rounded p-1 m-1">
+            <div class="col">
+                <div class="card fw-bold">
+                    <img src="./img/char/chunli.png" class="card-img grayScale" alt="...">
+
+                    <div class="card-img-overlay">
+                        <div class="m-1 p-1 text-dark bg-white border border-success rounded">
+                            waka
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card-group m-1">
+                    <div class="card text-center fw-bold">
+                        <img src="./img/char/ryu.png" class="card-img grayScale" alt="...">
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1 invisible" alt="...">
+
+                        </div>
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/luke.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1 invisible" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/jamie.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/chunli.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/guile.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/kimberly.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/juri.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/ken.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+
+                </div>
+
+                <div class="card-group m-1">
+
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/blanka.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/dhalsim.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/honda.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/dj.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/manon.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/marisa.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/jp.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/zangief.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+
+                </div>
+
+                <div class="card-group m-1">
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/lily.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/cammy.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/rashid.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/aki.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/random.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/random.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/random.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                    <div class="card text-bg-dark">
+                        <img src="./img/char/random.png" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
+                            <img src="./img/classic.png" class="card-img imgSmallType1" alt="...">
+                        </div>
+                        <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+-->
+    <div class="container">
+        <div class="text-end m-1" id="version">StreetFighter6 Profile Maker &copy waka / 20240221-1</div>
+    </div>
+</body>
+
+
+</html>
