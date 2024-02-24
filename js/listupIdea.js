@@ -1,5 +1,5 @@
 (function ($) {
-    const DebugMode = true;
+    const DebugMode = false;
     $.fn.sfProfile = function (options) {
         const NewChallengerNum = 39;
         const MasterRankNum = 36;
