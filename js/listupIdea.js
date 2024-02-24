@@ -1,4 +1,5 @@
 (function ($) {
+    const DebugMode = true;
     $.fn.sfProfile = function (options) {
         const NewChallengerNum = 39;
         const MasterRankNum = 36;
@@ -277,6 +278,7 @@
                     let _infoBody = $('<div>').addClass('card-body');
                     let _infoTitle = $('<h6>').addClass('card-title');
                     let _infotText = $('<div>').addClass('card-text fs-3');
+                    
 
                     let _isActive = false;
                     $.each(body, function (key, val) {
@@ -297,7 +299,8 @@
                         _infoTitle.text(title);
 
                         _infoBody.append(_infoTitle);
-                        _infoBody.append(_infotText);
+                        //_infoBody.append(_infotText);
+                        _infoTitle.append(_infotText);
                         _infoRow.append(_infoBody);
                     } else {
                         _infoTitle.text(title);
@@ -311,10 +314,13 @@
 
                 const _bsClass = 'm-1 p-1 text-dark bg-white border border-success rounded';
                 let _xdiv = $('<div>').addClass('col');
-                let _cardDiv = $('<div>').addClass('card fw-bold');
-                let _backImg = $('<img>').addClass('card-img');
+                let _cardDiv = $('<div>').addClass('card fw-bold m-1');
+                let _backImg = $('<img>').addClass('card-img m-1');
                 let _cardOverlay = $('<div>').addClass('card-img-overlay');
                 _backImg.attr({ 'src': cardImage });
+
+
+                _cardDiv.addClass('bg-dark');
 
                 //----
 
@@ -336,10 +342,10 @@
                     _cardCol2 = $('<div>').addClass('col');
 
                     _cardRow.append(_cardCol1);
-                    _cardCol1.append(getPlatform('プラットフォーム', PlatformArray));
+                    _cardCol1.append(getPlatform('プラットフォーム', PlatformArray, true));
 
                     _cardRow.append(_cardCol2);
-                    _cardCol2.append(getPlatform('ボイスチャット', VoiceChatArray));
+                    _cardCol2.append(getPlatform('ボイスチャット', VoiceChatArray, true));
                     _cardOverlay.append(_cardRow);
                 }
 
@@ -387,11 +393,14 @@
                     </div>
                 */
                 function getCharCard(charData, idx) {
-                    let _cardDiv = $('<div>').addClass('card text-center fw-bold');
+                    let _cardDiv = $('<div>').addClass('card text-center fw-bold').addClass('bg-dark');
                     let _cardOverlay = $('<div>').addClass('card-img-overlay');
 
                     let _charImg = $('<img>').addClass('card-img');
                     let _rankImg = $('<img>').addClass('card-img');
+
+                    const grayBgColor = 'bg-secondary';
+
                     if (charData && charData.active) {
                         let _img = charData.name['en'].toLowerCase() + '.png';
                         if (charData.name.file) {
@@ -400,6 +409,12 @@
                         _charImg.attr({ 'src': `./img/char/${_img}` });
                         if (!charData.favorite) {
                             _charImg.addClass('grayScale');
+                            _rankImg.addClass('grayScale');
+                            _charImg.addClass(grayBgColor);
+                            _rankImg.addClass(grayBgColor);
+                        } else {
+                            //_rankImg.addClass('bg-dark');
+                            _cardDiv.removeClass('bg-dark').addClass('border border-primary');
                         }
 
                         _rankImg.attr({ 'src': getRankImage(idx, 'l') });
@@ -459,12 +474,26 @@
             let _leftDiv = leftSide(cardImage);
             let _rightDiv = rightSide();
 
-            let _xdiv = $('<div>').addClass('row border border-success rounded p-1 m-1');
+            let _xdiv = $('<div>').addClass('row border border-dark rounded p-1 m-1');
             _xdiv.append(_leftDiv);
             _xdiv.append(_rightDiv);
             _container.append(_xdiv);
             $('#ProfileCardMain').append(_container);
         }
+
+        function debugBtn() {
+            let _container = $('<div>').addClass(bsContainer);
+            let _xdiv = $('<div>').addClass(bsSubitem);
+
+            let _btn = $('<span>').text('debug').attr({ 'id': 'gen', }).addClass('btn-primary m-2 rounded text-center');
+            _xdiv.append(_btn);
+            _container.append(_xdiv);
+            wrap.append(_container);
+            $('#gen').on('click', function () {
+                previewCard();
+            });
+        }
+
         setTextInfo(PlayerName, 'プレイヤー名');
         setTextInfo(FightersId, 'ユーザコード');
         setTextInfo(PlayTime, 'プレイ時間');
@@ -474,16 +503,14 @@
         setTextInfo(MessageText, 'コメント');
         getCharData();
 
-        if (true) {
+        if (DebugMode) {
+            debugBtn();
+        } else {
             $(function () {
                 setInterval(function () {
                     previewCard();
                 }, 800);
             });
         }
-
-        $('#gen').on('click', function () {
-            previewCard();
-        });
     }
 })(jQuery);
