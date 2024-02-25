@@ -423,7 +423,7 @@
                             _rankImg.addClass(grayBgColor);
                         } else {
                             //_rankImg.addClass('bg-dark');
-                            _cardDiv.removeClass('bg-dark').addClass('border border-primary');
+                            _cardDiv.removeClass('bg-dark').addClass('border border-dark');
                         }
 
                         _rankImg.attr({ 'src': getRankImage(idx, 'l') });
