@@ -107,7 +107,7 @@
                     continue;
                 }
 
-                let _xdiv = $('<div>').addClass('m-1 shadow p-1 rounded row border text-gr flex-nowrap');
+                let _xdiv = $('<div>').addClass('m-1 p-1 rounded row border text-gr flex-nowrap');
 
                 let _chkboxId = `cb${idx}`
                 let _chkbox = $('<input>').attr('type', 'checkbox').attr('id', _chkboxId);
