@@ -1,5 +1,5 @@
 (function ($) {
-    const DebugMode = false;
+    const DebugMode = true;
     $.fn.sfProfile = function (options) {
         const NewChallengerNum = 39;
         const MasterRankNum = 36;
@@ -22,6 +22,12 @@
         const bsContainer = 'container-lg cursorDefault';
         const bsSubitem = 'm-1 rounded row p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3';
 
+        function addUpdateEvent(id, type) {
+            id.on(type, function (e) {
+                previewCard();
+            });
+        }
+
         function setTextInfo(id, title) {
             let _container = $('<div>').addClass(bsContainer);
             let _xdiv = $('<div>').addClass(bsSubitem);
@@ -31,6 +37,7 @@
             _xdiv.append(_playerName);
             _xdiv.append(_inputName);
             _container.append(_xdiv);
+            addUpdateEvent(_inputName, 'input');
             wrap.append(_container);
         }
 
@@ -47,11 +54,13 @@
                 let _spanPlatform = $('<span>').addClass('m-2 rounded');
                 _spanPlatform.text(key);
                 _platformDiv.append(_spanPlatform);
+                const _aClass = 'fw-bold text-decoration-underline';
                 _spanPlatform.on('click', function (e) {
                     let _val = $(this).text();
                     let _isActive = PlatformArray[_val];
                     PlatformArray[_val] = !_isActive;
-                    PlatformArray[_val] ? $(this).addClass('fw-bold text-decoration-underline') : $(this).removeClass('fw-bold text-decoration-underline');
+                    PlatformArray[_val] ? $(this).addClass(_aClass) : $(this).removeClass(_aClass);
+                    previewCard();
                 });
             });
             _xdiv.append(_platformDiv);
@@ -73,11 +82,13 @@
                 let _spanPlatform = $('<span>').addClass('m-2 rounded');
                 _spanPlatform.text(key);
                 _platformDiv.append(_spanPlatform);
+                const _aClass = 'fw-bold text-decoration-underline';
                 _spanPlatform.on('click', function (e) {
                     let _val = $(this).text();
                     let _isActive = VoiceChatArray[_val];
                     VoiceChatArray[_val] = !_isActive;
-                    VoiceChatArray[_val] ? $(this).addClass('fw-bold text-decoration-underline') : $(this).removeClass('fw-bold text-decoration-underline');
+                    VoiceChatArray[_val] ? $(this).addClass(_aClass) : $(this).removeClass(_aClass);
+                    previewCard();
                 });
             });
             _xdiv.append(_platformDiv);
@@ -109,7 +120,7 @@
 
                 let _xdiv = $('<div>').addClass('m-1 p-1 rounded row border text-gr flex-nowrap');
 
-                let _chkboxId = `cb${idx}`
+                let _chkboxId = `cb${idx}`;
                 let _chkbox = $('<input>').attr('type', 'checkbox').attr('id', _chkboxId);
                 _chkbox.css({ 'height': '16px' });
 
@@ -140,12 +151,14 @@
                     let _onoff = charDataCopy[idx].ctrlType.modern;
                     charDataCopy[idx].ctrlType.modern = !_onoff;
                     _modern.toggleClass('grayScale');
+                    previewCard();
                 });
 
                 _classic.on('click', function (e) {
                     let _onoff = charDataCopy[idx].ctrlType.classic;
                     charDataCopy[idx].ctrlType.classic = !_onoff;
                     _classic.toggleClass('grayScale');
+                    previewCard();
                 });
 
                 //リーグ
@@ -171,7 +184,8 @@
                         _ximg.addClass('grayScale');
                     }
                     charDataCopy[idx].favorite = _onoff;
-                    console.log(JSON.stringify(charDataCopy));
+                    //console.log(JSON.stringify(charDataCopy));
+                    previewCard();
                 });
 
                 _xdiv.css({ 'height': '64px' });
@@ -218,6 +232,7 @@
                 } else {
                     _stars.hide();
                 }
+                previewCard();
             });
 
             _stars.on('change', function (e) {
@@ -225,6 +240,7 @@
                 charDataCopy[charidx].star = _selectedIdx;
 
                 $(`#leagueimg${charidx}`).attr('src', getRankImage(charidx));
+                previewCard();
             });
 
             _container.append(_select);
@@ -279,7 +295,7 @@
                     let _infoBody = $('<div>').addClass('card-body');
                     let _infoTitle = $('<h6>').addClass('card-title');
                     let _infotText = $('<div>').addClass('card-text fs-4');
-                    
+
 
                     let _isActive = false;
                     $.each(body, function (key, val) {
@@ -312,16 +328,14 @@
                     }
                     return _infoRow;
                 }
-
-                const _bsClass = 'm-1 p-1 text-dark bg-white border border-success rounded';
                 let _xdiv = $('<div>').addClass('col');
-                let _cardDiv = $('<div>').addClass('card fw-bold m-1');
+                let _cardDiv = $('<div>').addClass('card fw-bold m-1 bg-dark');
                 let _backImg = $('<img>').addClass('card-img m-1');
                 let _cardOverlay = $('<div>').addClass('card-img-overlay');
                 _backImg.attr({ 'src': cardImage });
 
 
-                _cardDiv.addClass('bg-dark');
+                //_cardDiv.addClass('h-100');
 
                 //----
 
@@ -351,7 +365,7 @@
                 }
 
                 _cardDiv.append(_cardOverlay.removeClass('card-img-overlay'));
-                
+
                 let _imageRow = $('<div>').addClass('row');
                 let _imageX = $('<div>').addClass('col ');
                 let _imageY = $('<div>').addClass('col-6 ');
@@ -458,25 +472,36 @@
                 }
                 let _xdiv = $('<div>').addClass('col');
 
-                for (let xidx = 0; xidx < charDataCopy.length; xidx += CharListColumnNum) {
+                if (true) {
+                    for (let xidx = 0; xidx < charDataCopy.length; xidx += CharListColumnNum) {
+                        let _cardGroupDiv = $('<div>').addClass('card-group m-1');
+                        for (let cidx = 0; cidx < CharListColumnNum; cidx++) {
+                            let _tidx = xidx + cidx;
+                            let _charData;
+                            if (_tidx > charDataCopy.length - 1) {
+                                _tidx = -1;
+                                _charData = null;
+                            } else {
+                                _charData = charDataCopy[_tidx];
+                            }
+                            if (_charData && !_charData.active) {
+                                _charData = null;
+                            }
+                            _cardGroupDiv.append(getCharCard(_charData, _tidx));
+                        }
+                        _xdiv.append(_cardGroupDiv);
+                    }
+                } else {
                     let _cardGroupDiv = $('<div>').addClass('card-group m-1');
-                    for (let cidx = 0; cidx < CharListColumnNum; cidx++) {
-                        let _tidx = xidx + cidx;
+                    for (let xidx = 0; xidx < charDataCopy.length; xidx++) {
                         let _charData;
-                        if (_tidx > charDataCopy.length - 1) {
-                            _tidx = -1;
-                            _charData = null;
-                        } else {
-                            _charData = charDataCopy[_tidx];
+                        _charData = charDataCopy[xidx];
+                        if (_charData.favorite) {
+                            _cardGroupDiv.append(getCharCard(_charData, xidx));
                         }
-                        if (_charData && ! _charData.active) {
-                            _charData = null;
-                        }
-                        _cardGroupDiv.append(getCharCard(_charData, _tidx));
                     }
                     _xdiv.append(_cardGroupDiv);
                 }
-
                 return _xdiv;
             }
             const cardImage = './img/logo.png';
@@ -517,13 +542,11 @@
         getCharData();
 
         if (DebugMode) {
-            debugBtn();
+            //debugBtn();
         } else {
-            $(function () {
-                setInterval(function () {
-                    previewCard();
-                }, 800);
-            });
+            //$(function () { setInterval(function () {previewCard();}, 800); });
         }
+
+        previewCard();
     }
 })(jQuery);
