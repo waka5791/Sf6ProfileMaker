@@ -1,5 +1,5 @@
 (function ($) {
-    const DebugMode = false;
+    const DebugMode = true;
     $.fn.sfProfile = function (options) {
         const NewChallengerNum = 39;
         const MasterRankNum = 36;
@@ -19,7 +19,7 @@
         let PlatformArray = platform[0];
         let VoiceChatArray = voicechat[0];
 
-        const bsContainer = 'container-lg containerExt';
+        const bsContainer = 'container-lg cursorDefault';
         const bsSubitem = 'm-1 rounded row p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3';
 
         function setTextInfo(id, title) {
@@ -184,7 +184,6 @@
                 _container.append(_xdiv);
             }
             wrap.append(_container);
-
         }
 
         function getLeague(charidx, lang = 'en') {
@@ -255,18 +254,20 @@
                     let _infoRow = $('<div>').addClass(cardClass);
                     let _infoBody = $('<div>').addClass('card-body');
                     let _infoTitle = $('<h6>').addClass('card-title');
-                    let _infotText = $('<div>').addClass('card-text fs-3');
+                    let _infotText = $('<div>').addClass('card-text fs-4');
                     if (body.length == 0) {
-                        body = '-';
+                        body = '';
                     }
                     if (istiny) {
-                        _infoTitle.text(`${title}: ${body}`);
+                        _infoTitle.text(`${title} ${body}`);
                         _infoBody.append(_infoTitle);
                         _infoRow.append(_infoBody);
                     } else {
                         _infoTitle.text(title);
                         _infotText.text(body);
-                        _infoBody.append(_infoTitle);
+                        if (title.length > 0) {
+                            _infoBody.append(_infoTitle);
+                        }
                         _infoBody.append(_infotText);
                         _infoRow.append(_infoBody);
                     }
@@ -277,7 +278,7 @@
                     let _infoRow = $('<div>').addClass(cardClass);
                     let _infoBody = $('<div>').addClass('card-body');
                     let _infoTitle = $('<h6>').addClass('card-title');
-                    let _infotText = $('<div>').addClass('card-text fs-3');
+                    let _infotText = $('<div>').addClass('card-text fs-4');
                     
 
                     let _isActive = false;
@@ -349,17 +350,25 @@
                     _cardOverlay.append(_cardRow);
                 }
 
-                _cardDiv.append(_cardOverlay.removeClass('card-img-overlay')).append(_backImg);
+                _cardDiv.append(_cardOverlay.removeClass('card-img-overlay'));
+                
+                let _imageRow = $('<div>').addClass('row');
+                let _imageX = $('<div>').addClass('col ');
+                let _imageY = $('<div>').addClass('col-6 ');
+                let _imageZ = $('<div>').addClass('col ');
+                _imageY.append(_backImg);
+                _imageRow.append(_imageX).append(_imageY).append(_imageZ);
 
+                _cardDiv.append(_imageRow);
                 {
                     _cardRow = $('<div>').addClass('row');
                     _cardCol1 = $('<div>').addClass('col');
                     _cardCol2 = $('<div>').addClass('col');
                     _cardRow.append(_cardCol1);
-                    _cardCol1.append(getCard('プレイ時間', $(`#${PlayTime}`).val(), true));
+                    _cardCol1.append(getCard('プレイ時間帯', $(`#${PlayTime}`).val(), false));
 
                     _cardRow.append(_cardCol2);
-                    _cardCol2.append(getCard('コントローラ', $(`#${ControlerType}`).val(), true));
+                    _cardCol2.append(getCard('コントローラ', $(`#${ControlerType}`).val(), false));
                     _cardDiv.append(_cardRow);
                 }
                 {
@@ -367,7 +376,7 @@
                     _cardCol1 = $('<div>').addClass('col');
                     _cardCol2 = $('<div>').addClass('col');
                     _cardRow.append(_cardCol1);
-                    _cardCol1.append(getCard('コメント', $(`#${MessageText}`).val()));
+                    _cardCol1.append(getCard('', $(`#${MessageText}`).val()));
 
                     _cardDiv.append(_cardRow);
                 }
@@ -454,11 +463,14 @@
                     for (let cidx = 0; cidx < CharListColumnNum; cidx++) {
                         let _tidx = xidx + cidx;
                         let _charData;
-                        if (_tidx >= charDataCopy.length - 1) {
+                        if (_tidx > charDataCopy.length - 1) {
                             _tidx = -1;
                             _charData = null;
                         } else {
                             _charData = charDataCopy[_tidx];
+                        }
+                        if (_charData && ! _charData.active) {
+                            _charData = null;
                         }
                         _cardGroupDiv.append(getCharCard(_charData, _tidx));
                     }
@@ -469,12 +481,13 @@
             }
             const cardImage = './img/logo.png';
             $('#ProfileCard').remove();
-            let _container = $('<div>').attr('id', 'ProfileCard').addClass(bsContainer);
-
+            let _container = $('<div>').attr('id', 'ProfileCard');
+            _container.addClass(bsContainer);
             let _leftDiv = leftSide(cardImage);
             let _rightDiv = rightSide();
 
             let _xdiv = $('<div>').addClass('row border border-dark rounded p-1 m-1');
+
             _xdiv.append(_leftDiv);
             _xdiv.append(_rightDiv);
             _container.append(_xdiv);
