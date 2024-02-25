@@ -52,7 +52,7 @@
      filter: opacity(40%);
  }
 
- .containerExt {
+ .cursorDefault {
      cursor: default;
      user-select: none;
  }
@@ -62,5 +62,5 @@
  }
 
  .carditem{
-    filter: opacity(40%);
+    filter: opacity(30%);
  }
