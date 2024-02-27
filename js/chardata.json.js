@@ -220,7 +220,7 @@ window.charData = [
     "active": true
   },
   {
-    "name": { "ja": "ランダム", "en": "RANDOM" },
+    "name": { "ja": "エド", "en": "ED" },
     "favorite": false,
     "league": "-1000",
     "star": "1",
@@ -230,8 +230,21 @@ window.charData = [
     },
     "active": true
   },
+  /*
+    {
+      "name": { "ja": "豪鬼", "en": "AKUMA" },
+      "favorite": false,
+      "league": "-1000",
+      "star": "1",
+      "ctrlType": {
+        "modern": false,
+        "classic": false
+      },
+      "active": false
+    },
+    */
   {
-    "name": { "ja": "エド", "en": "ED" },
+    "name": { "ja": "ランダム", "en": "RANDOM" },
     "favorite": false,
     "league": "-1000",
     "star": "1",
@@ -239,18 +252,7 @@ window.charData = [
       "modern": false,
       "classic": false
     },
-    "active": false
-  },
-  {
-    "name": { "ja": "豪鬼", "en": "AKUMA" },
-    "favorite": false,
-    "league": "-1000",
-    "star": "1",
-    "ctrlType": {
-      "modern": false,
-      "classic": false
-    },
-    "active": false
+    "active": true
   }
 ]
 
