@@ -112,13 +112,14 @@
 
         function getCharData(lang = "ja") {
             let _container = $('<div>').addClass(bsContainer);
+            const xdivClass = 'm-1 p-1 rounded border text-gr flex-nowrap';
             for (let idx = 0; idx < charData.length; idx++) {
                 let _charData = charData[idx];
                 if (!_charData.active) {
                     continue;
                 }
 
-                let _xdiv = $('<div>').addClass('m-1 p-1 rounded row border text-gr flex-nowrap');
+                let _xdiv = $('<div>').addClass(xdivClass);
 
                 let _chkboxId = `cb${idx}`;
                 let _chkbox = $('<input>').attr('type', 'checkbox').attr('id', _chkboxId);
@@ -145,7 +146,7 @@
                 let _classic = $('<img>').attr({ 'src': 'img/classic.png', 'alt': 'classic' }).css({ 'height': '24px', 'object-fit': 'contain' });;
                 charDataCopy[idx].ctrlType.modern ? true : _modern.addClass('grayScale');
                 _classic.addClass('grayScale');
-                _controlType.append(_modern).append(_classic).hide();
+                _controlType.append(_modern).append(_classic).invisible();
 
                 _modern.on('click', function (e) {
                     let _onoff = charDataCopy[idx].ctrlType.modern;
@@ -165,16 +166,17 @@
                 let _leagueimgsrc = getRankImage(idx);
                 let _leagueimg = $('<img>').attr({ 'src': `${_leagueimgsrc}` });
                 _leagueimg.css({ 'height': '48px', 'object-fit': 'contain' });
-                _leagueimg.attr('id', `leagueimg${idx}`).hide();//.css({ 'height': '32px', 'object-fit': 'contain' })
+                _leagueimg.attr('id', `leagueimg${idx}`).invisible();//.css({ 'height': '32px', 'object-fit': 'contain' })
 
                 _leagueElem = getLeague(idx);
-                _leagueElem.attr('id', `league${idx}`).hide();
+                _leagueElem.attr('id', `league${idx}`).invisible();
 
                 _ximg.addClass('grayScale');
                 _chkbox.on('change', function (e) {
-                    $(`#league${idx}`).toggle();
-                    $(`#leagueimg${idx}`).toggle();
-                    _controlType.toggle();
+                    //$(`#league${idx}`).toggle();
+                    $(`#leagueimg${idx}`).visibilityToggle();
+                    $(`#league${idx}`).visibilityToggle();
+                    _controlType.visibilityToggle();
                     let _onoff = $(this).prop('checked');
                     if (_onoff) {
                         _xdiv.addClass(' border-secondary ');
@@ -188,14 +190,35 @@
                     previewCard();
                 });
 
-                _xdiv.css({ 'height': '64px' });
-                _xdiv.append(_chkbox.addClass('col-1 m-2').hide());
-                _xdiv.append(_ximglbl.addClass('col-1 m-2'));
-                _xdiv.append(_namespan.addClass('col-2 m-2'));
-                _xdiv.append(_controlType.addClass('col-2 m-2'));
-                _xdiv.append(_leagueimg.addClass('col-2 m-2'));
-                _xdiv.append(_leagueElem.addClass('col m-2 flex-shrink-1'));
-                _container.append(_xdiv);
+                if (true) {
+                    _xdiv.addClass('row').css({ 'height': '64px' });
+                    _xdiv.append(_chkbox.addClass('col-1 m-2').hide());
+                    _xdiv.append(_ximglbl.addClass('col-1 m-2'));
+                    _xdiv.append(_namespan.addClass('col-2 m-2'));
+                    _xdiv.append(_controlType.addClass('col-2 m-2'));
+                    _xdiv.append(_leagueElem.addClass('col m-2 flex-shrink-1'));
+                    _xdiv.append(_leagueimg.addClass('col-2 m-2'));
+                    _container.append(_xdiv);
+                } else {
+                    _container.addClass('card-group');
+
+                    let _colDiv = $('<div>').addClass('col-3');
+                    _colDiv.append(_xdiv);
+                    _xdiv.addClass('card');
+                    _xdiv.append(_chkbox.hide());
+                    _ximg.addClass('card-img-top');
+                    _xdiv.append(_ximglbl);
+                    let _cardBody = $('<div>').addClass('card-body');
+                    let _cardTitle = $('<div>').addClass('card-title text-nowrap text-center');
+                    let _cardText1 = $('<div>').addClass('card-text text-center');
+                    _cardTitle.append(_namespan);
+                    _cardText1.append(_controlType);
+                    _cardText1.append(_leagueimg);
+                    _cardText1.append(_leagueElem);
+                    _cardBody.append(_cardTitle).append(_cardText1);
+                    _xdiv.append(_cardBody);
+                    _container.append(_colDiv);
+                }
             }
             wrap.append(_container);
         }
@@ -209,7 +232,7 @@
                 _select.append(_option);
             }
 
-            let _stars = $('<select>').hide();
+            let _stars = $('<select>').invisible();
             _select.on('change', function (e) {
                 let _selectedIdx = $("option:selected", this).val();
                 let _starsAry = league[parseInt(_selectedIdx)].star;
@@ -218,7 +241,7 @@
 
                 $(`#leagueimg${charidx}`).attr('src', getRankImage(charidx));
                 if (_starsAry.length > 0) {
-                    _stars.show();
+                    _stars.visible();
                     _stars.empty();
                     for (let idx = 0; idx < _starsAry.length; idx++) {
                         let _option = $('<option>');
@@ -230,7 +253,7 @@
                         }
                     }
                 } else {
-                    _stars.hide();
+                    _stars.invisible();
                 }
                 previewCard();
             });
@@ -266,11 +289,11 @@
                 */
 
                 const cardClass = 'card m-2';
-                function getCard(title, body, istiny = false) {
+                function getCard(title, body, id, istiny = false) {
                     let _infoRow = $('<div>').addClass(cardClass);
-                    let _infoBody = $('<div>').addClass('card-body');
+                    let _infoBody = $('<div>').addClass('card-body').attr({ 'id': id });
                     let _infoTitle = $('<h6>').addClass('card-title');
-                    let _infotText = $('<div>').addClass('card-text fs-4');
+                    let _infotText = $('<div>').addClass('card-text fs-5');
                     if (body.length == 0) {
                         body = '';
                     }
@@ -328,8 +351,10 @@
                     }
                     return _infoRow;
                 }
-                let _xdiv = $('<div>').addClass('col');
-                let _cardDiv = $('<div>').addClass('card fw-bold m-1 bg-dark');
+                let _xdiv = $('<div>').addClass('col').attr({ 'id': 'ProfileCardLeft' });
+                
+                let _cardDiv = $('<div>').addClass('card fw-bold m-1 bg-dark').attr({ 'id': 'ProfileCardLeftInner' });
+                _cardDiv.css({ 'height': '98.7%' });//むりやり調整
                 let _backImg = $('<img>').addClass('card-img m-1');
                 let _cardOverlay = $('<div>').addClass('card-img-overlay');
                 _backImg.attr({ 'src': cardImage });
@@ -345,10 +370,10 @@
                 let _cardCol3 = $('<div>').addClass('col');
 
                 _cardRow.append(_cardCol1);
-                _cardCol1.append(getCard('プレイヤー名', $(`#${PlayerName}`).val()));
+                _cardCol1.append(getCard('プレイヤー名', $(`#${PlayerName}`).val(), 'ProfilePlayerName'));
 
                 _cardRow.append(_cardCol2);
-                _cardCol2.append(getCard('ユーザコード', $(`#${FightersId}`).val()));
+                _cardCol2.append(getCard('ユーザコード', $(`#${FightersId}`).val(), 'ProfileUserCode'));
                 _cardOverlay.append(_cardRow);
 
                 {
@@ -379,10 +404,10 @@
                     _cardCol1 = $('<div>').addClass('col');
                     _cardCol2 = $('<div>').addClass('col');
                     _cardRow.append(_cardCol1);
-                    _cardCol1.append(getCard('プレイ時間帯', $(`#${PlayTime}`).val(), false));
+                    _cardCol1.append(getCard('プレイ時間帯', $(`#${PlayTime}`).val(), 'ProfilePlayTime', false));
 
                     _cardRow.append(_cardCol2);
-                    _cardCol2.append(getCard('コントローラ', $(`#${ControlerType}`).val(), false));
+                    _cardCol2.append(getCard('コントローラ', $(`#${ControlerType}`).val(), 'ProfileControlerType', false));
                     _cardDiv.append(_cardRow);
                 }
                 {
@@ -390,7 +415,8 @@
                     _cardCol1 = $('<div>').addClass('col');
                     _cardCol2 = $('<div>').addClass('col');
                     _cardRow.append(_cardCol1);
-                    _cardCol1.append(getCard('', $(`#${MessageText}`).val()));
+                    let _message = $(`#${MessageText}`).val();
+                    _cardCol1.append(getCard('', _message, 'ProfileComment'));
 
                     _cardDiv.append(_cardRow);
                 }
@@ -470,7 +496,7 @@
 
                     return _cardDiv;
                 }
-                let _xdiv = $('<div>').addClass('col');
+                let _xdiv = $('<div>').addClass('col').attr({ 'id': 'ProfileCardRight' });
 
                 if (true) {
                     for (let xidx = 0; xidx < charDataCopy.length; xidx += CharListColumnNum) {
@@ -519,19 +545,6 @@
             $('#ProfileCardMain').append(_container);
         }
 
-        function debugBtn() {
-            let _container = $('<div>').addClass(bsContainer);
-            let _xdiv = $('<div>').addClass(bsSubitem);
-
-            let _btn = $('<span>').text('debug').attr({ 'id': 'gen', }).addClass('btn-primary m-2 rounded text-center');
-            _xdiv.append(_btn);
-            _container.append(_xdiv);
-            wrap.append(_container);
-            $('#gen').on('click', function () {
-                previewCard();
-            });
-        }
-
         setTextInfo(PlayerName, 'プレイヤー名');
         setTextInfo(FightersId, 'ユーザコード');
         setTextInfo(PlayTime, 'プレイ時間');
@@ -541,12 +554,20 @@
         setTextInfo(MessageText, 'コメント');
         getCharData();
 
-        if (DebugMode) {
-            //debugBtn();
-        } else {
-            //$(function () { setInterval(function () {previewCard();}, 800); });
-        }
-
         previewCard();
     }
+
+    $.fn.visible = function () {
+        return this.css('visibility', 'visible');
+    };
+
+    $.fn.invisible = function () {
+        return this.css('visibility', 'hidden');
+    };
+
+    $.fn.visibilityToggle = function () {
+        return this.css('visibility', function (i, visibility) {
+            return (visibility == 'visible') ? 'hidden' : 'visible';
+        });
+    };
 })(jQuery);
