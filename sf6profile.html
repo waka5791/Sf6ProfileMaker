@@ -30,17 +30,54 @@
     <script id="_CACHE_BUSTER_" src="js/cache-busting.js" charset="utf-8"></script>
   -->
 
-    <link rel="stylesheet" href="css/main.css?20240225-1">
-    <script type="text/javascript" src="js/listupIdea.js?20240225-1"></script>
+    <link rel="stylesheet" href="css/main.css?20240228-1">
+    <script type="text/javascript" src="js/listupIdea.js?20240228-1"></script>
 </head>
 
 <body>
-    <h1 class="shadow text-center border border-success rounded  p-1 m-1 fw-bold">StreetFighter6 Profile Maker</h1>
+    <h1 class="text-center border border-3 border-secondary rounded  p-1 m-1 fw-bold">StreetFighter6 Profile Card Maker
+    </h1>
+    <div class="container-lg">
+        <div class="card ">
+            <div class="card-header bg-transparent border-secondary">
+                <h4>使い方</h4>
+                ※PC（1920 x 1080以上のディスプレイ）での利用を想定しています。スマホタブレットの利用は想定外です。
+            </div>
 
+            <div class="card-body">
+                <div class="card-title">
+                    <ol>
+                        <li>項目を埋める</li>
+                        <li>当ページの一番下に自己紹介カードができる</li>
+                        <li>ブラウザサイズを調整しカード部分をスクショ</li>
+                    </ol>
+                </div>
+                <div class="card-text">
+                    スクショ方法。
+
+                    <ul>
+                        <li>Windows：<span class="rounded border border-secondary px-2">SHIFT</span>＋<span
+                                class="rounded border border-secondary px-2">Win</span>＋<span
+                                class="rounded border border-secondary px-2">S</span></li>
+                        <li>MacOS：実機を持っていないため未検証だがたぶん<span
+                                class="rounded border border-secondary px-2">SHIFT</span>＋<span
+                                class="rounded border border-secondary px-2">COMMAND</span>＋<span
+                                class="rounded border border-secondary px-2">4</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-secondary text-end">
+                要望・質問・感想はXポストにリプライください。
+            </div>
+
+        </div>
+    </div>
     <div id="sfprofile"></div>
 
     <div id="ProfileCardMain"></div>
-    
+
+
     <script defer type="text/javascript">
         $(function () {
             $('#sfprofile').sfProfile();
@@ -48,8 +85,9 @@
     </script>
 
     <div class="container">
-        <div class="text-end m-1" id="version">StreetFighter6 Profile Maker &copy waka / 20240227-1</div>
+        <div class="text-end m-1" id="version">StreetFighter6 Profile Maker &copy waka / 20240228-1</div>
     </div>
+    <div id="SettingConsole"></div>
 </body>
 
 
