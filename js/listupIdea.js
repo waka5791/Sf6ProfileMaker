@@ -295,15 +295,16 @@
                     let _infoTitle = $('<h6>').addClass('card-title');
                     let _infotText = $('<div>').addClass('card-text fs-5');
                     if (body.length == 0) {
-                        body = '';
+                        body = '&nbsp;';
                     }
+
                     if (istiny) {
                         _infoTitle.text(`${title} ${body}`);
                         _infoBody.append(_infoTitle);
                         _infoRow.append(_infoBody);
                     } else {
                         _infoTitle.text(title);
-                        _infotText.text(body);
+                        _infotText.html(body);
                         if (title.length > 0) {
                             _infoBody.append(_infoTitle);
                         }
@@ -322,6 +323,7 @@
 
                     let _isActive = false;
                     $.each(body, function (key, val) {
+
                         if (val) {
                             let _img = $('<img>').addClass('p-1 icon');
                             let _item = key;
@@ -331,7 +333,7 @@
                         }
                     });
                     if (!_isActive) {
-                        let _textSpan = $('<span>').text('-');
+                        let _textSpan = $('<div>').html('&nbsp').addClass('p-1 icon');
                         _infotText.append(_textSpan);
                     }
 
@@ -352,9 +354,9 @@
                     return _infoRow;
                 }
                 let _xdiv = $('<div>').addClass('col').attr({ 'id': 'ProfileCardLeft' });
-                
+
                 let _cardDiv = $('<div>').addClass('card fw-bold m-1 bg-dark').attr({ 'id': 'ProfileCardLeftInner' });
-                _cardDiv.css({ 'height': '98.7%' });//むりやり調整
+                //_cardDiv.css({ 'height': '98.7%' });//むりやり調整
                 let _backImg = $('<img>').addClass('card-img m-1');
                 let _cardOverlay = $('<div>').addClass('card-img-overlay');
                 _backImg.attr({ 'src': cardImage });
@@ -392,9 +394,9 @@
                 _cardDiv.append(_cardOverlay.removeClass('card-img-overlay'));
 
                 let _imageRow = $('<div>').addClass('row');
-                let _imageX = $('<div>').addClass('col ');
-                let _imageY = $('<div>').addClass('col-6 ');
-                let _imageZ = $('<div>').addClass('col ');
+                let _imageX = $('<div>').addClass('col');
+                let _imageY = $('<div>').addClass('col-8');
+                let _imageZ = $('<div>').addClass('col');
                 _imageY.append(_backImg);
                 _imageRow.append(_imageX).append(_imageY).append(_imageZ);
 
@@ -413,10 +415,11 @@
                 {
                     _cardRow = $('<div>').addClass('row');
                     _cardCol1 = $('<div>').addClass('col');
-                    _cardCol2 = $('<div>').addClass('col');
                     _cardRow.append(_cardCol1);
                     let _message = $(`#${MessageText}`).val();
-                    _cardCol1.append(getCard('', _message, 'ProfileComment'));
+                    let _messageDiv = getCard('', _message, 'ProfileComment');
+                    _messageDiv.css({ height: 208 });
+                    _cardCol1.append(_messageDiv);
 
                     _cardDiv.append(_cardRow);
                 }
@@ -538,7 +541,7 @@
             let _rightDiv = rightSide();
 
             let _xdiv = $('<div>').addClass('row border border-dark rounded p-1 m-1');
-
+            _xdiv.css({ width: 1280, height: 840 });
             _xdiv.append(_leftDiv);
             _xdiv.append(_rightDiv);
             _container.append(_xdiv);
