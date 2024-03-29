@@ -31,115 +31,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Stick&display=swap" rel="stylesheet">
 
-    <script defer type="text/javascript" src="js/chardata.json.js"></script>
-
-    <!--
-    <script id="_CACHE_BUSTER_" src="js/cache-busting.js" charset="utf-8"></script>
-  -->
-
-    <link rel="stylesheet" href="css/main.css?20240228-1">
-    <script type="text/javascript" src="js/listupIdea.js?20240228-1"></script>
+    <link rel="stylesheet" href="css/main.css?20240329-1">
 </head>
 
 <body>
     <h1 class="text-center border border-3 border-secondary rounded  p-1 m-1 fw-bold">StreetFighter6 Profile Card Maker
     </h1>
-    <!-- Button trigger modal -->
-    <div class=" m-3 text-center">
-        <button type="button" class="btn btn-primary w-75" data-bs-toggle="modal" data-bs-target="#SfProfileInputModal">
-            作成する
-        </button>
-        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#HowToUseModal">
-            使い方
-        </button>
-
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="HowToUseModal" tabindex="-1" aria-labelledby="HowToUseModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="HowToUseModalLabel">使い方</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="container-lg">
-                        <div class="card ">
-                            <div class="card-header bg-transparent border-secondary">
-                                ※PC（1920 x 1080以上のディスプレイ）での利用を想定しています。スマホタブレットの利用は想定外です。
-                            </div>
-
-                            <div class="card-body">
-                                <div class="card-title">
-                                    <ol>
-                                        <li>「作成する」ボタンを押して項目を埋める</li>
-                                        <li>自己紹介カードができる</li>
-                                        <li>ブラウザサイズを調整しカード部分をスクショ</li>
-                                    </ol>
-                                </div>
-                                <div class="card-text">
-                                    スクショ方法。
-
-                                    <ul>
-                                        <li>Windows：<span
-                                                class="rounded border border-secondary px-2">SHIFT</span>＋<span
-                                                class="rounded border border-secondary px-2">Win</span>＋<span
-                                                class="rounded border border-secondary px-2">S</span></li>
-                                        <li>MacOS：実機を持っていないため未検証だがたぶん<span
-                                                class="rounded border border-secondary px-2">SHIFT</span>＋<span
-                                                class="rounded border border-secondary px-2">COMMAND</span>＋<span
-                                                class="rounded border border-secondary px-2">4</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-footer bg-transparent border-secondary text-end">
-                                要望・質問・感想はXポストにリプライください。
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="SfProfileInputModal" tabindex="-1" aria-labelledby="SfProfileInputModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg" style="height: 500px;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="SfProfileInputModalLabel">入力項目</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="sfprofile"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
-
-    <div id="ProfileCardMain"></div>
-
-    <script defer type="text/javascript">
-        $(function () {
-            $('#sfprofile').sfProfile();
-        });
+    <script type="text/javascript">
+        window.location.href = "./index.html";
     </script>
-
-    <div class="container">
-        <div class="text-end m-1" id="version">StreetFighter6 Profile Card Maker &copy waka / 20240305-1</div>
-    </div>
-    <div id="SettingConsole"></div>
 </body>
 
 
