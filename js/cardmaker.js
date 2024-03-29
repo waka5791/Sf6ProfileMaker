@@ -5,6 +5,9 @@
         const MasterRankNum = 36;
         const LegendRankNum = 37;
 
+        const CardWidth = 1100;//CharListColunNum 7 : 1300、6 のとき1100、CharDataの長さが25以上になると考える
+        const MessageBoxHeight = 210;//CharListColunNum 7 : 200 6のとき210
+
         const CharListColumnNum = 6;
 
         const PlayerName = 'PlayerName';
@@ -19,8 +22,11 @@
         let PlatformArray = platform[0];
         let VoiceChatArray = voicechat[0];
 
-        const bsContainer = 'container-lg cursorDefault';
+        const bsMainContainer = 'container-fluid cursorDefault';
+        const bsContainer = 'container cursorDefault';
         const bsSubitem = 'm-1 rounded row p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3';
+
+
 
         function addUpdateEvent(id, type) {
             id.on(type, function (e) {
@@ -166,14 +172,13 @@
                 let _leagueimgsrc = getRankImage(idx);
                 let _leagueimg = $('<img>').attr({ 'src': `${_leagueimgsrc}` });
                 _leagueimg.css({ 'height': '48px', 'object-fit': 'contain' });
-                _leagueimg.attr('id', `leagueimg${idx}`).invisible();//.css({ 'height': '32px', 'object-fit': 'contain' })
+                _leagueimg.attr('id', `leagueimg${idx}`).invisible();
 
                 _leagueElem = getLeague(idx);
                 _leagueElem.attr('id', `league${idx}`).invisible();
 
                 _ximg.addClass('grayScale');
                 _chkbox.on('change', function (e) {
-                    //$(`#league${idx}`).toggle();
                     $(`#leagueimg${idx}`).visibilityToggle();
                     $(`#league${idx}`).visibilityToggle();
                     _controlType.visibilityToggle();
@@ -190,35 +195,15 @@
                     previewCard();
                 });
 
-                if (true) {
-                    _xdiv.addClass('row').css({ 'height': '64px' });
-                    _xdiv.append(_chkbox.addClass('col-1 m-2').hide());
-                    _xdiv.append(_ximglbl.addClass('col-1 m-2'));
-                    _xdiv.append(_namespan.addClass('col-2 m-2'));
-                    _xdiv.append(_controlType.addClass('col-2 m-2'));
-                    _xdiv.append(_leagueElem.addClass('col m-2 flex-shrink-1'));
-                    _xdiv.append(_leagueimg.addClass('col-2 m-2'));
-                    _container.append(_xdiv);
-                } else {
-                    _container.addClass('card-group');
+                _xdiv.addClass('row').css({ 'height': '64px' });
+                _xdiv.append(_chkbox.addClass('col-1 m-2').hide());
+                _xdiv.append(_ximglbl.addClass('col-1 m-2'));
+                _xdiv.append(_namespan.addClass('col-2 m-2'));
+                _xdiv.append(_controlType.addClass('col-2 m-2'));
+                _xdiv.append(_leagueElem.addClass('col m-2 flex-shrink-1'));
+                _xdiv.append(_leagueimg.addClass('col-2 m-2'));
+                _container.append(_xdiv);
 
-                    let _colDiv = $('<div>').addClass('col-3');
-                    _colDiv.append(_xdiv);
-                    _xdiv.addClass('card');
-                    _xdiv.append(_chkbox.hide());
-                    _ximg.addClass('card-img-top');
-                    _xdiv.append(_ximglbl);
-                    let _cardBody = $('<div>').addClass('card-body');
-                    let _cardTitle = $('<div>').addClass('card-title text-nowrap text-center');
-                    let _cardText1 = $('<div>').addClass('card-text text-center');
-                    _cardTitle.append(_namespan);
-                    _cardText1.append(_controlType);
-                    _cardText1.append(_leagueimg);
-                    _cardText1.append(_leagueElem);
-                    _cardBody.append(_cardTitle).append(_cardText1);
-                    _xdiv.append(_cardBody);
-                    _container.append(_colDiv);
-                }
             }
             wrap.append(_container);
         }
@@ -232,7 +217,7 @@
                 _select.append(_option);
             }
 
-            let _stars = $('<select>').invisible();
+            let _stars = $('<select>').hide();
             _select.on('change', function (e) {
                 let _selectedIdx = $("option:selected", this).val();
                 let _starsAry = league[parseInt(_selectedIdx)].star;
@@ -241,7 +226,6 @@
 
                 $(`#leagueimg${charidx}`).attr('src', getRankImage(charidx));
                 if (_starsAry.length > 0) {
-                    _stars.visible();
                     _stars.empty();
                     for (let idx = 0; idx < _starsAry.length; idx++) {
                         let _option = $('<option>');
@@ -252,8 +236,10 @@
                             _option.attr("selected", "selected");
                         }
                     }
+                    _stars.show();
                 } else {
-                    _stars.invisible();
+                    _stars.empty();
+                    _stars.hide();
                 }
                 previewCard();
             });
@@ -289,41 +275,37 @@
                 */
 
                 const cardClass = 'card m-2';
-                function getCard(title, body, id, istiny = false) {
+                function getCard(title, body, id, isCenter = true) {
                     let _infoRow = $('<div>').addClass(cardClass);
-                    let _infoBody = $('<div>').addClass('card-body').attr({ 'id': id });
-                    let _infoTitle = $('<h6>').addClass('card-title');
-                    let _infotText = $('<div>').addClass('card-text fs-5');
+                    let _infoBody = $('<div>').attr({ 'id': id });//.addClass('card-body');
+                    let _infoTitle = $('<h6>').addClass('m-1');//.addClass('card-title');
+                    let _infotText = $('<div>').addClass('m-1');//.addClass('card-text fs-5');
                     if (body.length == 0) {
                         body = '&nbsp;';
                     }
-
-                    if (istiny) {
-                        _infoTitle.text(`${title} ${body}`);
+                    _infoTitle.text(title);
+                    _infotText.html(body);
+                    if (title.length > 0) {
                         _infoBody.append(_infoTitle);
-                        _infoRow.append(_infoBody);
-                    } else {
-                        _infoTitle.text(title);
-                        _infotText.html(body);
-                        if (title.length > 0) {
-                            _infoBody.append(_infoTitle);
-                        }
-                        _infoBody.append(_infotText);
-                        _infoRow.append(_infoBody);
                     }
+                    _infoBody.append(_infotText);
+                    _infoRow.append(_infoBody);
+                    if (isCenter) {
+                        _infotText.addClass('text-center');
+                    }
+
                     return _infoRow;
                 }
 
-                function getPlatform(title, body, istiny = false) {
+                function getPlatform(title, body) {
                     let _infoRow = $('<div>').addClass(cardClass);
-                    let _infoBody = $('<div>').addClass('card-body');
-                    let _infoTitle = $('<h6>').addClass('card-title');
-                    let _infotText = $('<div>').addClass('card-text fs-4');
+                    let _infoBody = $('<div>');//.addClass('card-body');
+                    let _infoTitle = $('<h6>').addClass('m-1');//.addClass('card-title');
+                    let _infotText = $('<div>').addClass('m-1');//.addClass('card-text fs-4');
 
-
+                    _infotText.addClass('text-center');
                     let _isActive = false;
                     $.each(body, function (key, val) {
-
                         if (val) {
                             let _img = $('<img>').addClass('p-1 icon');
                             let _item = key;
@@ -337,18 +319,12 @@
                         _infotText.append(_textSpan);
                     }
 
-                    if (istiny) {
+                    {
                         _infoTitle.text(title);
 
                         _infoBody.append(_infoTitle);
                         //_infoBody.append(_infotText);
                         _infoTitle.append(_infotText);
-                        _infoRow.append(_infoBody);
-                    } else {
-                        _infoTitle.text(title);
-
-                        _infoBody.append(_infoTitle);
-                        _infoBody.append(_infotText);
                         _infoRow.append(_infoBody);
                     }
                     return _infoRow;
@@ -360,7 +336,7 @@
                 let _backImg = $('<img>').addClass('card-img m-1');
                 let _cardOverlay = $('<div>').addClass('card-img-overlay');
                 _backImg.attr({ 'src': cardImage });
-
+                //_backImg.css({ 'height': '100px' });
 
                 //_cardDiv.addClass('h-100');
 
@@ -371,12 +347,19 @@
                 let _cardCol2 = $('<div>').addClass('col');
                 let _cardCol3 = $('<div>').addClass('col');
 
-                _cardRow.append(_cardCol1);
-                _cardCol1.append(getCard('プレイヤー名', $(`#${PlayerName}`).val(), 'ProfilePlayerName'));
+                if (true) {
+                    _cardRow.append(_cardCol1);
+                    _cardCol1.append(getCard('プレイヤー名', $(`#${PlayerName}`).val(), 'ProfilePlayerName'));
 
-                _cardRow.append(_cardCol2);
-                _cardCol2.append(getCard('ユーザコード', $(`#${FightersId}`).val(), 'ProfileUserCode'));
-                _cardOverlay.append(_cardRow);
+                    _cardRow.append(_cardCol2);
+                    _cardCol2.append(getCard('ユーザコード', $(`#${FightersId}`).val(), 'ProfileUserCode'));
+                    _cardOverlay.append(_cardRow);
+                } else {
+                    _cardRow.append(getCard('プレイヤー名', $(`#${PlayerName}`).val(), 'ProfilePlayerName'));
+
+                    _cardRow.append(getCard('ユーザコード', $(`#${FightersId}`).val(), 'ProfileUserCode'));
+                    _cardOverlay.append(_cardRow);
+                }
 
                 {
                     _cardRow = $('<div>').addClass('row');
@@ -406,10 +389,10 @@
                     _cardCol1 = $('<div>').addClass('col');
                     _cardCol2 = $('<div>').addClass('col');
                     _cardRow.append(_cardCol1);
-                    _cardCol1.append(getCard('プレイ時間帯', $(`#${PlayTime}`).val(), 'ProfilePlayTime', false));
+                    _cardCol1.append(getCard('プレイ時間帯', $(`#${PlayTime}`).val(), 'ProfilePlayTime'));
 
                     _cardRow.append(_cardCol2);
-                    _cardCol2.append(getCard('コントローラ', $(`#${ControlerType}`).val(), 'ProfileControlerType', false));
+                    _cardCol2.append(getCard('コントローラ', $(`#${ControlerType}`).val(), 'ProfileControlerType'));
                     _cardDiv.append(_cardRow);
                 }
                 {
@@ -417,8 +400,8 @@
                     _cardCol1 = $('<div>').addClass('col');
                     _cardRow.append(_cardCol1);
                     let _message = $(`#${MessageText}`).val();
-                    let _messageDiv = getCard('', _message, 'ProfileComment');
-                    _messageDiv.css({ height: 208 });
+                    let _messageDiv = getCard('', _message, 'ProfileComment', false);
+                    _messageDiv.css({ height: MessageBoxHeight });
                     _cardCol1.append(_messageDiv);
 
                     _cardDiv.append(_cardRow);
@@ -501,47 +484,61 @@
                 }
                 let _xdiv = $('<div>').addClass('col').attr({ 'id': 'ProfileCardRight' });
 
-                if (true) {
-                    for (let xidx = 0; xidx < charDataCopy.length; xidx += CharListColumnNum) {
-                        let _cardGroupDiv = $('<div>').addClass('card-group m-1');
-                        for (let cidx = 0; cidx < CharListColumnNum; cidx++) {
-                            let _tidx = xidx + cidx;
-                            let _charData;
-                            if (_tidx > charDataCopy.length - 1) {
-                                _tidx = -1;
-                                _charData = null;
-                            } else {
-                                _charData = charDataCopy[_tidx];
-                            }
-                            if (_charData && !_charData.active) {
-                                _charData = null;
-                            }
-                            _cardGroupDiv.append(getCharCard(_charData, _tidx));
-                        }
+                let _favOnlyMode = false;
+                let _favoriteCnt = 0;
+                for (let xidx = 0; xidx < charDataCopy.length; xidx++) {
+                    let _charData;
+                    _charData = charDataCopy[xidx];
+                    if (_charData && _charData.favorite) {
+                        _favoriteCnt++;
+                    }
+                }
+                let _columnNum = CharListColumnNum;
+                if (_favOnlyMode && _favoriteCnt > 0) {
+                   // _columnNum = _favoriteCnt;
+                }
+
+                let _loopIdx = 0;
+                let _cardGroupDiv = $('<div>');
+                let _sup = _columnNum - (charDataCopy.length % _columnNum);
+                if (_favOnlyMode) {
+                    //_sup = 0;
+                }
+                while (_loopIdx < charDataCopy.length + _sup) {
+                    let _appendCnt = _cardGroupDiv.children().length;
+                    if (_appendCnt % _columnNum == 0) {
+                        _cardGroupDiv = $('<div>').addClass('card-group m-1');
                         _xdiv.append(_cardGroupDiv);
                     }
-                } else {
-                    let _cardGroupDiv = $('<div>').addClass('card-group m-1');
-                    for (let xidx = 0; xidx < charDataCopy.length; xidx++) {
-                        let _charData;
-                        _charData = charDataCopy[xidx];
-                        if (_charData.favorite) {
-                            _cardGroupDiv.append(getCharCard(_charData, xidx));
-                        }
+                    _charData = charDataCopy[_loopIdx];
+                    if (_charData && !_charData.active) {
+                        _charData = null;
                     }
-                    _xdiv.append(_cardGroupDiv);
+                    let _charCardInfo = $('<div>');
+                    _charCardInfo = getCharCard(_charData, _loopIdx);
+                    _cardGroupDiv.append(_charCardInfo);
+
+                    _loopIdx++
                 }
+
                 return _xdiv;
             }
             const cardImage = './img/logo.png';
             $('#ProfileCard').remove();
             let _container = $('<div>').attr('id', 'ProfileCard');
-            _container.addClass(bsContainer);
+            _container.addClass(bsMainContainer);
+            _container.css({ width: CardWidth });
+
             let _leftDiv = leftSide(cardImage);
             let _rightDiv = rightSide();
 
             let _xdiv = $('<div>').addClass('row border border-dark rounded p-1 m-1');
-            _xdiv.css({ width: 1280, height: 840 });
+            /* */
+            //_xdiv.css({ width: 1280, height: 840 });
+            //_xdiv.css({ width: 900, height: 640 });
+            // $('#ProfileCardMain').css({ width: 1280, height: 840 });
+            //_xdiv.addClass('CaptureZone');
+
             _xdiv.append(_leftDiv);
             _xdiv.append(_rightDiv);
             _container.append(_xdiv);
@@ -550,7 +547,7 @@
 
         setTextInfo(PlayerName, 'プレイヤー名');
         setTextInfo(FightersId, 'ユーザコード');
-        setTextInfo(PlayTime, 'プレイ時間');
+        setTextInfo(PlayTime, 'プレイ時間帯');
         setTextInfo(ControlerType, 'コントローラ');
         setPlatform();
         setVoiceChat();
@@ -558,6 +555,41 @@
         getCharData();
 
         previewCard();
+
+        /*
+                let test = $(".CaptureZone").get(0);
+                // to canvas
+                $('.toCanvas').click(function (e) {
+                    html2canvas(test).then(function (canvas) {
+                        // canvas width
+                        var canvasWidth = canvas.width;
+                        // canvas height
+                        var canvasHeight = canvas.height;
+                        // render canvas
+                        $('.toCanvas').after(canvas);
+                        // show 'to image' button
+                        $('.toPic').show(1000);
+                        // convert canvas to image
+                        $('.toPic').click(function (e) {
+                            var img = Canvas2Image.convertToImage(canvas, canvasWidth, canvasHeight);
+                            // render image
+                            $(".toPic").after(img);
+                            // save
+                            $('#save').click(function (e) {
+                                let type = $('#sel').val(); // image type
+                                let w = $('#imgW').val(); // image width
+                                let h = $('#imgH').val(); // image height
+                                let f = $('#imgFileName').val(); // file name
+                                w = (w === '') ? canvasWidth : w;
+                                h = (h === '') ? canvasHeight : h;
+                                // save as image
+                                Canvas2Image.saveAsImage(canvas, w, h, type, f);
+                            });
+                        });
+                    });
+                });
+        */
+
     }
 
     $.fn.visible = function () {
