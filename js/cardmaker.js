@@ -16,6 +16,8 @@
         const ControlerType = 'ControlerType';
         const MessageText = 'MessageText';
 
+        let userData = { PlayerName: '', FightersId: '', PlayTime: '', ControlerType: '', MessageText: '' };
+
         let wrap = $(this);
 
         let charDataCopy = $.extend([], charData);
@@ -23,19 +25,65 @@
         let VoiceChatArray = voicechat[0];
 
         const bsMainContainer = 'container-fluid cursorDefault';
-        const bsContainer = 'container cursorDefault';
+        const bsContainer = 'container cursorDefault inputInfo';
         const bsSubitem = 'm-1 rounded row p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3';
 
+        function ImportParam(json) {
+            let _importJson = $('#ImportProfileData').val();
+            let _loadJson = JSON.parse(_importJson);
 
+            charData = _loadJson[0].charData;
+            userData = _loadJson[0].userData;
+            platform = _loadJson[0].platform;
+            voicechat = _loadJson[0].voicechat;
 
-        function addUpdateEvent(id, type) {
-            id.on(type, function (e) {
+            //console.log(JSON.stringify(charData));
+            let _oldData = charDataCopy;
+            let _newData = [];
+            let _loopIdx = 0;
+            while (_loopIdx < _oldData.length) {               
+                _charData = _oldData[_loopIdx];
+                let _xidx = 0;
+                let _isExist = false;
+                while (_xidx < charData.length) {
+                    if (_charData.name.ja == charData[_xidx].name.ja) {
+                        _isExist = true;
+                        _newData.push(charData[_xidx]);
+                        break;
+                    }
+                    _xidx++;
+                }
+                if (!_isExist) {
+                    _newData.push(_charData);
+                }
+                _loopIdx++
+            }
+
+            charDataCopy = $.extend([], _newData);
+            InitInputForm();
+            previewCard();
+        }
+
+        function ExportParam() {
+            let _expData = '';
+            _expData = `[{`;
+            _expData += `"charData": ${JSON.stringify(charDataCopy)}`;
+            _expData += `, "userData": ${JSON.stringify(userData)}`;
+            _expData += `, "platform": [${JSON.stringify(PlatformArray)}]`;
+            _expData += `, "voicechat": [${JSON.stringify(VoiceChatArray)}]`;
+            _expData += `}]`;
+            $('#ExportProfileData').val(_expData);
+        }
+
+        function addUpdateEvent(elem, type, id) {
+            elem.on(type, function (e) {
+                userData[id] = $(this).val();
                 previewCard();
             });
         }
 
         function setTextInfo(id, title) {
-            let _container = $('<div>').addClass(bsContainer);
+            let _container = $('<div>').addClass('TextInfo').addClass(bsContainer);
             let _xdiv = $('<div>').addClass(bsSubitem);
 
             let _playerName = $('<span>').text(title).addClass('col-2 text-center fw-bold');
@@ -43,7 +91,8 @@
             _xdiv.append(_playerName);
             _xdiv.append(_inputName);
             _container.append(_xdiv);
-            addUpdateEvent(_inputName, 'input');
+            _inputName.val(userData[id]);
+            addUpdateEvent(_inputName, 'input', id);
             wrap.append(_container);
         }
 
@@ -61,6 +110,9 @@
                 _spanPlatform.text(key);
                 _platformDiv.append(_spanPlatform);
                 const _aClass = 'fw-bold text-decoration-underline';
+                if (val) {
+                    _spanPlatform.addClass(_aClass);
+                }
                 _spanPlatform.on('click', function (e) {
                     let _val = $(this).text();
                     let _isActive = PlatformArray[_val];
@@ -89,6 +141,9 @@
                 _spanPlatform.text(key);
                 _platformDiv.append(_spanPlatform);
                 const _aClass = 'fw-bold text-decoration-underline';
+                if (val) {
+                    _spanPlatform.addClass(_aClass);
+                }
                 _spanPlatform.on('click', function (e) {
                     let _val = $(this).text();
                     let _isActive = VoiceChatArray[_val];
@@ -152,7 +207,7 @@
                 let _classic = $('<img>').attr({ 'src': 'img/classic.png', 'alt': 'classic' }).css({ 'height': '24px', 'object-fit': 'contain' });;
                 charDataCopy[idx].ctrlType.modern ? true : _modern.addClass('grayScale');
                 _classic.addClass('grayScale');
-                _controlType.append(_modern).append(_classic).invisible();
+                _controlType.append(_modern).append(_classic);
 
                 _modern.on('click', function (e) {
                     let _onoff = charDataCopy[idx].ctrlType.modern;
@@ -172,12 +227,19 @@
                 let _leagueimgsrc = getRankImage(idx);
                 let _leagueimg = $('<img>').attr({ 'src': `${_leagueimgsrc}` });
                 _leagueimg.css({ 'height': '48px', 'object-fit': 'contain' });
-                _leagueimg.attr('id', `leagueimg${idx}`).invisible();
+                _leagueimg.attr('id', `leagueimg${idx}`);
 
                 _leagueElem = getLeague(idx);
-                _leagueElem.attr('id', `league${idx}`).invisible();
+                _leagueElem.attr('id', `league${idx}`);
 
-                _ximg.addClass('grayScale');
+                if (!charDataCopy[idx].favorite) {
+                    _controlType.invisible();
+                    _leagueimg.invisible();
+                    _leagueElem.invisible();
+                }
+
+                //_ximg.addClass('grayScale');
+                charDataCopy[idx].favorite ? _ximg.removeClass('grayScale') : _ximg.addClass('grayScale');
                 _chkbox.on('change', function (e) {
                     $(`#leagueimg${idx}`).visibilityToggle();
                     $(`#league${idx}`).visibilityToggle();
@@ -214,6 +276,9 @@
             for (let idx = 0; idx < league.length; idx++) {
                 let _option = $('<option>');
                 _option.text(league[idx].league[lang]).val(idx);
+                if (charDataCopy[charidx].league == league[idx].image) {
+                    _option.attr("selected", "selected");
+                }
                 _select.append(_option);
             }
 
@@ -247,7 +312,6 @@
             _stars.on('change', function (e) {
                 let _selectedIdx = $("option:selected", this).val();
                 charDataCopy[charidx].star = _selectedIdx;
-
                 $(`#leagueimg${charidx}`).attr('src', getRankImage(charidx));
                 previewCard();
             });
@@ -263,12 +327,12 @@
             <div class="col">
                 <div class="card fw-bold">
                     <img src="./img/char/chunli.png" class="card-img grayScale" alt="...">
-
+ 
                     <div class="card-img-overlay">
                         <div class="m-1 p-1 text-dark bg-white border border-success rounded">
                             waka
                         </div>
-
+ 
                     </div>
                 </div>
             </div>
@@ -332,32 +396,21 @@
                 let _xdiv = $('<div>').addClass('col').attr({ 'id': 'ProfileCardLeft' });
 
                 let _cardDiv = $('<div>').addClass('card fw-bold m-1 bg-dark').attr({ 'id': 'ProfileCardLeftInner' });
-                //_cardDiv.css({ 'height': '98.7%' });//むりやり調整
                 let _backImg = $('<img>').addClass('card-img m-1');
                 let _cardOverlay = $('<div>').addClass('card-img-overlay');
                 _backImg.attr({ 'src': cardImage });
-                //_backImg.css({ 'height': '100px' });
-
-                //_cardDiv.addClass('h-100');
-
-                //----
 
                 let _cardRow = $('<div>').addClass('row');
                 let _cardCol1 = $('<div>').addClass('col');
                 let _cardCol2 = $('<div>').addClass('col');
                 let _cardCol3 = $('<div>').addClass('col');
 
-                if (true) {
+                {
                     _cardRow.append(_cardCol1);
                     _cardCol1.append(getCard('プレイヤー名', $(`#${PlayerName}`).val(), 'ProfilePlayerName'));
 
                     _cardRow.append(_cardCol2);
                     _cardCol2.append(getCard('ユーザコード', $(`#${FightersId}`).val(), 'ProfileUserCode'));
-                    _cardOverlay.append(_cardRow);
-                } else {
-                    _cardRow.append(getCard('プレイヤー名', $(`#${PlayerName}`).val(), 'ProfilePlayerName'));
-
-                    _cardRow.append(getCard('ユーザコード', $(`#${FightersId}`).val(), 'ProfileUserCode'));
                     _cardOverlay.append(_cardRow);
                 }
 
@@ -367,10 +420,10 @@
                     _cardCol2 = $('<div>').addClass('col');
 
                     _cardRow.append(_cardCol1);
-                    _cardCol1.append(getPlatform('プラットフォーム', PlatformArray, true));
+                    _cardCol1.append(getPlatform('プラットフォーム', PlatformArray));
 
                     _cardRow.append(_cardCol2);
-                    _cardCol2.append(getPlatform('ボイスチャット', VoiceChatArray, true));
+                    _cardCol2.append(getPlatform('ボイスチャット', VoiceChatArray));
                     _cardOverlay.append(_cardRow);
                 }
 
@@ -419,11 +472,11 @@
                     <div class="card text-center fw-bold">
                         <img src="./img/char/ryu.png" class="card-img grayScale" alt="...">
                         <img src="./img/rank/rank34_l.png" class="card-img" alt="...">
-
+ 
                         <div class="card-img-overlay">
                             <img src="./img/modern.png" class="card-img imgSmallType1" alt="...">
                             <img src="./img/classic.png" class="card-img imgSmallType1 invisible" alt="...">
-
+ 
                         </div>
                     </div>
                 */
@@ -495,7 +548,7 @@
                 }
                 let _columnNum = CharListColumnNum;
                 if (_favOnlyMode && _favoriteCnt > 0) {
-                   // _columnNum = _favoriteCnt;
+                    // _columnNum = _favoriteCnt;
                 }
 
                 let _loopIdx = 0;
@@ -545,15 +598,30 @@
             $('#ProfileCardMain').append(_container);
         }
 
-        setTextInfo(PlayerName, 'プレイヤー名');
-        setTextInfo(FightersId, 'ユーザコード');
-        setTextInfo(PlayTime, 'プレイ時間帯');
-        setTextInfo(ControlerType, 'コントローラ');
-        setPlatform();
-        setVoiceChat();
-        setTextInfo(MessageText, 'コメント');
-        getCharData();
+        $('#BtnImportProfile').on('click', function (e) {
+            ImportParam();
+        });
 
+        $('#BtnExportProfile').on('click', function (e) {
+            ExportParam();
+        });
+
+        function InitInputForm() {            
+            PlatformArray = platform[0];
+            VoiceChatArray = voicechat[0];
+            $('.inputInfo').remove();
+            setTextInfo(PlayerName, 'プレイヤー名');
+            setTextInfo(FightersId, 'ユーザコード');
+            setTextInfo(PlayTime, 'プレイ時間帯');
+            setTextInfo(ControlerType, 'コントローラ');
+            setPlatform();
+            setVoiceChat();
+            setTextInfo(MessageText, 'コメント');
+            getCharData();
+        }
+
+
+        InitInputForm();
         previewCard();
 
         /*
