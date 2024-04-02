@@ -273,39 +273,43 @@
         function getLeague(charidx, lang = 'en') {
             let _container = $('<div>');
             let _select = $('<select>');
+            let _selectedIdx = null;
             for (let idx = 0; idx < league.length; idx++) {
                 let _option = $('<option>');
                 _option.text(league[idx].league[lang]).val(idx);
                 if (charDataCopy[charidx].league == league[idx].image) {
                     _option.attr("selected", "selected");
+                    _selectedIdx = idx;
                 }
                 _select.append(_option);
             }
 
             let _stars = $('<select>').hide();
+            let _starsAry = [];
+            if (_selectedIdx) {
+                _starsAry =  league[parseInt(_selectedIdx)].star;
+            }
+            if (_starsAry.length > 0) {
+                _stars.empty();
+                for (let idx = 0; idx < _starsAry.length; idx++) {
+                    let _option = $('<option>');
+                    _option.text('★'.repeat(_starsAry[idx])).val(_starsAry[idx]);
+                    _stars.append(_option);
+
+                    if (_starsAry[idx] == charDataCopy[charidx].star) {
+                        _option.attr("selected", "selected");
+                    }
+                }
+                _stars.show();
+            } else {
+                _stars.empty();
+                _stars.hide();
+            }
+
             _select.on('change', function (e) {
                 let _selectedIdx = $("option:selected", this).val();
-                let _starsAry = league[parseInt(_selectedIdx)].star;
-
                 charDataCopy[charidx].league = league[parseInt(_selectedIdx)].image;
-
                 $(`#leagueimg${charidx}`).attr('src', getRankImage(charidx));
-                if (_starsAry.length > 0) {
-                    _stars.empty();
-                    for (let idx = 0; idx < _starsAry.length; idx++) {
-                        let _option = $('<option>');
-                        _option.text('★'.repeat(_starsAry[idx])).val(_starsAry[idx]);
-                        _stars.append(_option);
-
-                        if (_starsAry[idx] == charDataCopy[charidx].star) {
-                            _option.attr("selected", "selected");
-                        }
-                    }
-                    _stars.show();
-                } else {
-                    _stars.empty();
-                    _stars.hide();
-                }
                 previewCard();
             });
 
@@ -318,6 +322,7 @@
 
             _container.append(_select);
             _container.append(_stars);
+            
             return _container;
         }
 
