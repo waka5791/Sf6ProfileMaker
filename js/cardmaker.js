@@ -23,6 +23,7 @@
         let charDataCopy = $.extend([], charData);
         let PlatformArray = platform[0];
         let VoiceChatArray = voicechat[0];
+        let GenderArray = gender[0];
 
         const bsMainContainer = 'container-fluid cursorDefault';
         const bsContainer = 'container cursorDefault inputInfo';
@@ -41,7 +42,7 @@
             let _oldData = charDataCopy;
             let _newData = [];
             let _loopIdx = 0;
-            while (_loopIdx < _oldData.length) {               
+            while (_loopIdx < _oldData.length) {
                 _charData = _oldData[_loopIdx];
                 let _xidx = 0;
                 let _isExist = false;
@@ -96,16 +97,16 @@
             wrap.append(_container);
         }
 
-        function setPlatform() {
+        function setPlatformVC(title, _assortArray) {
             let _container = $('<div>').addClass(bsContainer);
             let _xdiv = $('<div>').addClass(bsSubitem);
 
-            let _playerName = $('<span>').text('プラットフォーム').addClass('col-2 text-center fw-bold');
-            _xdiv.append(_playerName);
+            let _titleName = $('<span>').text(title).addClass('col-2 text-center fw-bold');
+            _xdiv.append(_titleName);
 
             let _platformDiv = $('<div>').addClass('col text-center');
 
-            $.each(PlatformArray, function (key, val) {
+            $.each(_assortArray, function (key, val) {
                 let _spanPlatform = $('<span>').addClass('m-2 rounded');
                 _spanPlatform.text(key);
                 _platformDiv.append(_spanPlatform);
@@ -115,40 +116,9 @@
                 }
                 _spanPlatform.on('click', function (e) {
                     let _val = $(this).text();
-                    let _isActive = PlatformArray[_val];
-                    PlatformArray[_val] = !_isActive;
-                    PlatformArray[_val] ? $(this).addClass(_aClass) : $(this).removeClass(_aClass);
-                    previewCard();
-                });
-            });
-            _xdiv.append(_platformDiv);
-
-            _container.append(_xdiv);
-            wrap.append(_container);
-        }
-
-        function setVoiceChat() {
-            let _container = $('<div>').addClass(bsContainer);
-            let _xdiv = $('<div>').addClass(bsSubitem);
-
-            let _playerName = $('<span>').text('ボイスチャット').addClass('col-2 text-center fw-bold');
-            _xdiv.append(_playerName);
-
-            let _platformDiv = $('<div>').addClass('col text-center');
-
-            $.each(VoiceChatArray, function (key, val) {
-                let _spanPlatform = $('<span>').addClass('m-2 rounded');
-                _spanPlatform.text(key);
-                _platformDiv.append(_spanPlatform);
-                const _aClass = 'fw-bold text-decoration-underline';
-                if (val) {
-                    _spanPlatform.addClass(_aClass);
-                }
-                _spanPlatform.on('click', function (e) {
-                    let _val = $(this).text();
-                    let _isActive = VoiceChatArray[_val];
-                    VoiceChatArray[_val] = !_isActive;
-                    VoiceChatArray[_val] ? $(this).addClass(_aClass) : $(this).removeClass(_aClass);
+                    let _isActive = _assortArray[_val];
+                    _assortArray[_val] = !_isActive;
+                    _assortArray[_val] ? $(this).addClass(_aClass) : $(this).removeClass(_aClass);
                     previewCard();
                 });
             });
@@ -284,32 +254,37 @@
                 _select.append(_option);
             }
 
-            let _stars = $('<select>').hide();
-            let _starsAry = [];
-            if (_selectedIdx) {
-                _starsAry =  league[parseInt(_selectedIdx)].star;
-            }
-            if (_starsAry.length > 0) {
-                _stars.empty();
-                for (let idx = 0; idx < _starsAry.length; idx++) {
-                    let _option = $('<option>');
-                    _option.text('★'.repeat(_starsAry[idx])).val(_starsAry[idx]);
-                    _stars.append(_option);
-
-                    if (_starsAry[idx] == charDataCopy[charidx].star) {
-                        _option.attr("selected", "selected");
-                    }
+            let _stars = $('<select>');
+            let _starsAry = [1, 2, 3, 4, 5];
+            for (let idx = 0; idx < _starsAry.length; idx++) {
+                let _option = $('<option>');
+                _option.text('★'.repeat(_starsAry[idx])).val(_starsAry[idx]);
+                _stars.append(_option);
+                if (_starsAry[idx] == charDataCopy[charidx].star) {
+                    _option.attr("selected", "selected");
                 }
-                _stars.show();
+            }
+
+            if (_selectedIdx) {
+                _starsAry = league[parseInt(_selectedIdx)].star;
+                if (_starsAry.length > 0) {
+                    _stars.show();
+                } else {
+                    _stars.hide();
+                }
             } else {
-                _stars.empty();
                 _stars.hide();
             }
-
             _select.on('change', function (e) {
                 let _selectedIdx = $("option:selected", this).val();
                 charDataCopy[charidx].league = league[parseInt(_selectedIdx)].image;
                 $(`#leagueimg${charidx}`).attr('src', getRankImage(charidx));
+                let _starsAry = league[parseInt(_selectedIdx)].star;
+                if (_starsAry.length > 0) {
+                    _stars.show();
+                } else {
+                    _stars.hide();
+                }
                 previewCard();
             });
 
@@ -322,7 +297,7 @@
 
             _container.append(_select);
             _container.append(_stars);
-            
+
             return _container;
         }
 
@@ -352,7 +327,24 @@
                     if (body.length == 0) {
                         body = '&nbsp;';
                     }
+
                     _infoTitle.text(title);
+
+                    /*
+                    let _isActive = false;
+                    let _gender = '';
+                    if (id == 'ProfilePlayerName') {
+                        $.each(GenderArray, function (key, val) {
+                            if (val) {
+                                _gender += key;
+                                _isActive = true;
+                            }
+                        });
+                    }
+                    if (_isActive) {
+                        _infoTitle.text(`${title} （性別：${_gender}）`);
+                    }
+*/
                     _infotText.html(body);
                     if (title.length > 0) {
                         _infoBody.append(_infoTitle);
@@ -611,16 +603,18 @@
             ExportParam();
         });
 
-        function InitInputForm() {            
+        function InitInputForm() {
             PlatformArray = platform[0];
             VoiceChatArray = voicechat[0];
             $('.inputInfo').remove();
             setTextInfo(PlayerName, 'プレイヤー名');
+            //setPlatformVC('性別', GenderArray);
             setTextInfo(FightersId, 'ユーザコード');
+
             setTextInfo(PlayTime, 'プレイ時間帯');
             setTextInfo(ControlerType, 'コントローラ');
-            setPlatform();
-            setVoiceChat();
+            setPlatformVC('プラットフォーム', PlatformArray);
+            setPlatformVC('ボイスチャット', VoiceChatArray)
             setTextInfo(MessageText, 'コメント');
             getCharData();
         }
