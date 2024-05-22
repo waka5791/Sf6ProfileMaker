@@ -230,7 +230,6 @@ window.charData = [
     },
     "active": true
   },
-  /*
     {
       "name": { "ja": "豪鬼", "en": "AKUMA" },
       "favorite": false,
@@ -242,7 +241,6 @@ window.charData = [
       },
       "active": false
     },
-    */
   {
     "name": { "ja": "ランダム", "en": "RANDOM" },
     "favorite": false,
