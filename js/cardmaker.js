@@ -33,7 +33,7 @@
             let _importJson = $('#ImportProfileData').val();
             let _loadJson = JSON.parse(_importJson);
 
-            charData = _loadJson[0].charData;
+            _XcharData = _loadJson[0].charData;
             userData = _loadJson[0].userData;
             platform = _loadJson[0].platform;
             voicechat = _loadJson[0].voicechat;
@@ -46,10 +46,10 @@
                 _charData = _oldData[_loopIdx];
                 let _xidx = 0;
                 let _isExist = false;
-                while (_xidx < charData.length) {
-                    if (_charData.name.ja == charData[_xidx].name.ja) {
+                while (_xidx < _XcharData.length) {
+                    if (_charData.name.ja == _XcharData[_xidx].name.ja) {
                         _isExist = true;
-                        _newData.push(charData[_xidx]);
+                        _newData.push(_XcharData[_xidx]);
                         break;
                     }
                     _xidx++;
@@ -88,7 +88,7 @@
             let _xdiv = $('<div>').addClass(bsSubitem);
 
             let _playerName = $('<span>').text(title).addClass('col-2 text-center fw-bold');
-            let _inputName = $('<input>').attr({ 'id': id, 'type': 'text', 'placeholder': title }).addClass('col');
+            let _inputName = $('<input>').attr({ 'id': id, 'type': 'text'/*, 'placeholder': title*/ }).addClass('col');
             _xdiv.append(_playerName);
             _xdiv.append(_inputName);
             _container.append(_xdiv);
@@ -149,9 +149,7 @@
                 if (!_charData.active) {
                     continue;
                 }
-
                 let _xdiv = $('<div>').addClass(xdivClass);
-
                 let _chkboxId = `cb${idx}`;
                 let _chkbox = $('<input>').attr('type', 'checkbox').attr('id', _chkboxId);
                 _chkbox.css({ 'height': '16px' });
@@ -165,11 +163,9 @@
                 let _ximglbl = $('<label>').attr('for', _chkboxId);
                 _ximglbl.append(_ximg);
 
-
                 //キャラ名
                 let _namespan = $('<label>').text(_charData.name[lang]);
                 _namespan.attr('for', _chkboxId);
-
 
                 //操作タイプ
                 let _controlType = $('<div>');
@@ -208,13 +204,14 @@
                     _leagueElem.invisible();
                 }
 
-                //_ximg.addClass('grayScale');
                 charDataCopy[idx].favorite ? _ximg.removeClass('grayScale') : _ximg.addClass('grayScale');
-                _chkbox.on('change', function (e) {
+                _chkbox.on('click', function (e) {
                     $(`#leagueimg${idx}`).visibilityToggle();
                     $(`#league${idx}`).visibilityToggle();
                     _controlType.visibilityToggle();
-                    let _onoff = $(this).prop('checked');
+
+                    let _onoff = charDataCopy[idx].favorite;
+                    _onoff = !_onoff;
                     if (_onoff) {
                         _xdiv.addClass(' border-secondary ');
                         _ximg.removeClass('grayScale');
@@ -223,7 +220,6 @@
                         _ximg.addClass('grayScale');
                     }
                     charDataCopy[idx].favorite = _onoff;
-                    //console.log(JSON.stringify(charDataCopy));
                     previewCard();
                 });
 
@@ -275,6 +271,7 @@
             } else {
                 _stars.hide();
             }
+
             _select.on('change', function (e) {
                 let _selectedIdx = $("option:selected", this).val();
                 charDataCopy[charidx].league = league[parseInt(_selectedIdx)].image;
@@ -345,11 +342,24 @@
                         _infoTitle.text(`${title} （性別：${_gender}）`);
                     }
 */
-                    _infotText.html(body);
+                    
                     if (title.length > 0) {
                         _infoBody.append(_infoTitle);
                     }
-                    _infoBody.append(_infotText);
+                    
+                    if (Array.isArray(body)) {
+                        body.forEach((_item) => {
+                            _x = $('<div>').addClass('m-1');
+                            if (_item.length == 0) {
+                                _item = '&nbsp;'
+                            }
+                            _x.html(_item);
+                            _infoBody.append(_x);
+                        });
+                    } else {
+                        _infotText.html(body);
+                        _infoBody.append(_infotText);
+                    }
                     _infoRow.append(_infoBody);
                     if (isCenter) {
                         _infotText.addClass('text-center');
@@ -382,7 +392,6 @@
 
                     {
                         _infoTitle.text(title);
-
                         _infoBody.append(_infoTitle);
                         //_infoBody.append(_infotText);
                         _infoTitle.append(_infotText);
@@ -450,13 +459,13 @@
                     _cardCol1 = $('<div>').addClass('col');
                     _cardRow.append(_cardCol1);
                     let _message = $(`#${MessageText}`).val();
-                    let _messageDiv = getCard('', _message, 'ProfileComment', false);
+
+                    let _messageDiv = getCard('', _message.split('<>'), 'ProfileComment', false);
                     _messageDiv.css({ height: MessageBoxHeight });
                     _cardCol1.append(_messageDiv);
 
                     _cardDiv.append(_cardRow);
                 }
-
 
                 _xdiv.append(_cardDiv);
                 return _xdiv;
@@ -573,6 +582,7 @@
 
                 return _xdiv;
             }
+
             const cardImage = './img/logo.png';
             $('#ProfileCard').remove();
             let _container = $('<div>').attr('id', 'ProfileCard');
@@ -615,10 +625,9 @@
             setTextInfo(ControlerType, 'コントローラ');
             setPlatformVC('プラットフォーム', PlatformArray);
             setPlatformVC('ボイスチャット', VoiceChatArray)
-            setTextInfo(MessageText, 'コメント');
+            setTextInfo(MessageText, 'コメント（改行：<>）');
             getCharData();
         }
-
 
         InitInputForm();
         previewCard();
