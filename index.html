@@ -31,9 +31,10 @@
 
     <!-- Capture Screen Plug-in -->
     <!-- https://www.jqueryscript.net/other/Capture-HTML-Elements-Screenshot.html-->
+    <!--
     <script type="text/javascript" src="js/3rdparty/Capture-HTML-Elements-Screenshot/html2canvas.min.js"></script>
     <script type="text/javascript" src="js/3rdparty/Capture-HTML-Elements-Screenshot/canvas2image.js"></script>
-
+-->
     <!-- Import Character Data -->
     <script defer type="text/javascript" src="js/chardata.json.js?20240529-1"></script>
 
@@ -42,7 +43,7 @@
   -->
 
     <link rel="stylesheet" href="css/main.css?20240402-1">
-    <script type="text/javascript" src="js/cardmaker.js?20240529-1"></script>
+    <script type="text/javascript" src="js/cardmaker.js?20240605-1"></script>
 </head>
 
 <body>
@@ -55,11 +56,13 @@
             作成する
         </button>
     -->
-        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#HowToUseModal">
+        <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#HowToUseModal">
             使い方
         </button>
-        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#LoadUserProfileModal">
-            入力内容のセーブ・ロード
+        <button type="button" class="btn btn-outline-success" id="BtnExportProfile">セーブ</button>
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+            data-bs-target="#LoadUserProfileModal">
+            ロード
         </button>
     </div>
     <!-- Modal -->
@@ -89,10 +92,7 @@
                                                     class="rounded border border-secondary px-2">Ctrl</span>押しながらマウスホイールくるくるするとか
                                             </li>
                                         </ul>
-                                        <li>入力した内容を次回以降再利用したい場合は入力内容のセーブ・ロードボタン</li>
-                                        <ul>
-                                            <li>入力内容のセーブ・ロード：入力した内容をセーブして次回入力時ロードすることで入力時の負担を減らせます</li>
-                                        </ul>
+
                                     </ol>
                                 </div>
                                 <div class="card-text">
@@ -111,10 +111,30 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="card-footer bg-transparent border-secondary text-end">
-                                要望・質問・感想はXポストにリプライください。
+
+
+                        </div>
+                        <div class="card ">
+                            <div class="card-header bg-transparent border-secondary">
+                                入力した内容を次回以降再利用したい場合は「セーブ」「ロード」ボタン
                             </div>
 
+                            <div class="card-body">
+                                <div class="card-text">
+                                    <ol>
+                                        <ul>
+                                            <li>セーブ：入力した内容をテキストでクリップボードにコピーします。クリップボードデータをメモ帳などで例えば SF6Profile
+                                                などの名前でファイル保存してください。</li>
+                                            <li>ロード：保存したテキストデータをコピペしてロードボタンを押すと保存したデータを再現します。</li>
+                                        </ul>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card ">
+                            <div class="card-footer bg-transparent text-end">
+                                要望・質問・感想はXポストにリプライください。
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -150,7 +170,7 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="LoadUserProfileLabel">セーブ・ロード</h1>
+                    <h1 class="modal-title fs-5" id="LoadUserProfileLabel">ロード</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -158,33 +178,18 @@
                         <div class="card ">
                             <div class="card-body">
                                 <div class="card-title">
-                                    入力した内容をセーブしておくことで保存した内容をロードして再利用できます。
+                                    保存した内容をロードして再利用できます。
                                 </div>
                                 <div class="card-text">
                                     <div class="mb-3">
-                                        <label for="ExportProfileData" class="form-label">セーブ</label>
-                                        <textarea class="form-control" spellcheck="false" id="ExportProfileData" rows="3"></textarea>
-                                        <div class="text-end m-2">
-                                            <button type="button" class="btn btn-success"
-                                                id="BtnExportProfile">入力した内容をセーブ</button>
-                                        </div>
+                                        <label for="ImportProfileData"
+                                            class="form-label">ロード：保存した内容を以下フォームにコピペして</label>
+                                        <textarea class="form-control p-3" spellcheck="false" id="ImportProfileData"
+                                            rows="10"></textarea>
                                     </div>
                                 </div>
-                                <div class="card-footer bg-transparent border-secondary text-end">
-                                    セーブ：内容をメモ帳にコピペ保存
-                                </div>
-                                <div class="card-text">
-                                    <div class="mb-3">
-                                        <label for="ImportProfileData" class="form-label">ロード</label>
-                                        <textarea class="form-control" spellcheck="false" id="ImportProfileData" rows="3"></textarea>
-                                        <div class="text-end m-2">
-                                            <button type="button" class="btn btn-primary"
-                                                id="BtnImportProfile">保存したデータをロード</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer bg-transparent border-secondary text-end">
-                                    ロード：保存した内容コピペ
+                                <div class="mb-3 text-end">
+                                    <button type="button" class="btn btn-primary" id="BtnImportProfile">ロード</button>
                                 </div>
                             </div>
                         </div>
@@ -229,7 +234,7 @@
     </div>
 -->
     <div class="container">
-        <div class="text-end m-1" id="version">StreetFighter6 Profile Card Maker &copy waka / 20240529-1</div>
+        <div class="text-end m-1" id="version">StreetFighter6 Profile Card Maker &copy waka / 20240605-1</div>
     </div>
     <div id="SettingConsole"></div>
 </body>
