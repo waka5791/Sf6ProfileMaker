@@ -28,7 +28,6 @@
         const bsMainContainer = 'container-fluid cursorDefault';
         const bsContainer = 'container cursorDefault inputInfo';
         const bsSubitem = 'm-1 rounded row p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3';
-
         function ImportParam(json) {
             let _importJson = $('#ImportProfileData').val();
             let _loadJson = JSON.parse(_importJson);
@@ -66,14 +65,47 @@
         }
 
         function ExportParam() {
-            let _expData = '';
-            _expData = `[{`;
-            _expData += `"charData": ${JSON.stringify(charDataCopy)}`;
-            _expData += `, "userData": ${JSON.stringify(userData)}`;
-            _expData += `, "platform": [${JSON.stringify(PlatformArray)}]`;
-            _expData += `, "voicechat": [${JSON.stringify(VoiceChatArray)}]`;
-            _expData += `}]`;
-            $('#ExportProfileData').val(_expData);
+            function ClipboardCopy(_copyText, _msg) {
+                if (navigator.clipboard == undefined) {
+                    window.clipboardData.setData('Text', _copyText);
+                } else {
+                    navigator.clipboard.writeText(_copyText).then(
+                        () => {
+                            /* clipboard successfully set */
+                        },
+                        () => {
+                            /* clipboard write failed */
+                            let _textArea = document.createElement('textarea');
+                            _textArea.value = _copyText;
+                            document.body.appendChild(_textArea);
+                            _textArea.select();
+                            document.execCommand('copy');
+                            _textArea.parentElement.removeChild(_textArea);
+                        },
+                    );
+                }
+                alert(_msg);
+            };
+            /*
+                        let _expData = '';
+                        _expData = `[{`;
+                        _expData += `"charData": ${JSON.stringify(charDataCopy)}`;
+                        _expData += `, "userData": ${JSON.stringify(userData)}`;
+                        _expData += `, "platform": [${JSON.stringify(PlatformArray)}]`;
+                        _expData += `, "voicechat": [${JSON.stringify(VoiceChatArray)}]`;
+                        _expData += `}]`;
+                        $('#ExportProfileData').val(_expData);
+                        */
+            let _expJsonData = {};
+            _expJsonData.charData = charDataCopy;
+            _expJsonData.userData = userData;
+            _expJsonData.platform = [PlatformArray];
+            _expJsonData.voicechat = [VoiceChatArray];
+            let _copyText = JSON.stringify(_expJsonData, null, "\t");
+            _copyText = `[${_copyText}]`;
+            ClipboardCopy(_copyText, "クリップボードコピーしました。\r\nメモ帳などでファイルに保存してください。\r\n保存した内容を次回更新時に再利用できます。");
+
+            //$('#ExportProfileData').val(_copyText);
         }
 
         function addUpdateEvent(elem, type, id) {
@@ -342,11 +374,11 @@
                         _infoTitle.text(`${title} （性別：${_gender}）`);
                     }
 */
-                    
+
                     if (title.length > 0) {
                         _infoBody.append(_infoTitle);
                     }
-                    
+
                     if (Array.isArray(body)) {
                         body.forEach((_item) => {
                             _x = $('<div>').addClass('m-1');
