@@ -1,14 +1,31 @@
 (function ($) {
     const DebugMode = true;
     $.fn.sfProfile = function (options) {
-        const NewChallengerNum = 39;
         const MasterRankNum = 36;
         const LegendRankNum = 37;
+        const NewChallengerNum = 39;
 
-        const CardWidth = 1100;//CharListColunNum 7 : 1300、6 のとき1100、CharDataの長さが25以上になると考える
-        const MessageBoxHeight = 210;//CharListColunNum 7 : 200 6のとき210
 
-        const CharListColumnNum = 6;
+        const CharListColumnNum = 7;
+        let MessageBoxHeight = 180;//CharListColunNum 7 : 180 6のとき210
+        let CardWidth = 1250;//CharListColunNum 7 : 1250、6 のとき1100、CharDataの長さが25以上になると考える
+
+        switch (CharListColumnNum) {
+            case 6:
+                MessageBoxHeight = 210;
+                CardWidth = 1100;
+                break;
+            case 7:
+                MessageBoxHeight = 175;
+                CardWidth = 1250;
+                break;
+            case 8:
+                MessageBoxHeight = 140;
+                CardWidth = 1400;
+                break;
+            default:
+                break;
+        }
 
         const PlayerName = 'PlayerName';
         const FightersId = 'FightersId';
@@ -103,7 +120,7 @@
             _expJsonData.voicechat = [VoiceChatArray];
             let _copyText = JSON.stringify(_expJsonData, null, "\t");
             _copyText = `[${_copyText}]`;
-            ClipboardCopy(_copyText, "クリップボードコピーしました。\r\nメモ帳などでファイルに保存してください。\r\n保存した内容を次回更新時に再利用できます。");
+            ClipboardCopy(_copyText, "クリップボードコピーしました。\r\nメモ帳などでファイルに保存してください。\r\n保存した内容を次回更新時にロードすることで再利用できます。");
 
             //$('#ExportProfileData').val(_copyText);
         }
@@ -527,13 +544,20 @@
 
                     const grayBgColor = 'bg-secondary';
 
-                    if (charData && charData.active) {
+                    if (charData) {
                         let _img = charData.name['en'].toLowerCase() + '.png';
                         if (charData.name.file) {
                             _img = charData.name.file + '.png';
                         }
+                        if (!charData.active) {
+                            _img = 'random.png';
+                        }
                         _charImg.attr({ 'src': `./img/char/${_img}` });
-                        if (!charData.favorite) {
+                        if (!charData.active) {
+                            //  _cardDiv.removeClass('bg-dark');
+                            _charImg.addClass('grayScale');
+                            _rankImg.addClass('grayScale');
+                        } else if (!charData.favorite) {
                             _charImg.addClass('grayScale');
                             _rankImg.addClass('grayScale');
                             _charImg.addClass(grayBgColor);
@@ -592,6 +616,9 @@
                 let _loopIdx = 0;
                 let _cardGroupDiv = $('<div>');
                 let _sup = _columnNum - (charDataCopy.length % _columnNum);
+                if (charDataCopy.length % _columnNum == 0) {
+                    _sup = 0;
+                }
                 if (_favOnlyMode) {
                     //_sup = 0;
                 }
@@ -603,7 +630,8 @@
                     }
                     _charData = charDataCopy[_loopIdx];
                     if (_charData && !_charData.active) {
-                        _charData = null;
+                        //_charData = null;
+                        let dmy = true;
                     }
                     let _charCardInfo = $('<div>');
                     _charCardInfo = getCharCard(_charData, _loopIdx);
