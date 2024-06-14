@@ -230,17 +230,65 @@ window.charData = [
     },
     "active": true
   },
-    {
-      "name": { "ja": "豪鬼", "en": "AKUMA" },
-      "favorite": false,
-      "league": "-1000",
-      "star": "1",
-      "ctrlType": {
-        "modern": false,
-        "classic": false
-      },
-      "active": true
+  {
+    "name": { "ja": "豪鬼", "en": "AKUMA" },
+    "favorite": false,
+    "league": "-1000",
+    "star": "1",
+    "ctrlType": {
+      "modern": false,
+      "classic": false
     },
+    "active": true
+  },
+  
+  {
+    "name": { "ja": "ベガ", "en": "BISON", "file": "vega" },
+    "favorite": false,
+    "league": "-1000",
+    "star": "1",
+    "ctrlType": {
+      "modern": false,
+      "classic": false
+    },
+    "active": false
+  },
+    
+  {
+    "name": { "ja": "テリーボガード", "en": "Terry" },
+    "favorite": false,
+    "league": "-1000",
+    "star": "1",
+    "ctrlType": {
+      "modern": false,
+      "classic": false
+    },
+    "active": false
+  },
+    
+  {
+    "name": { "ja": "不知火舞", "en": "MAI" },
+    "favorite": false,
+    "league": "-1000",
+    "star": "1",
+    "ctrlType": {
+      "modern": false,
+      "classic": false
+    },
+    "active": false
+  },
+    
+  {
+    "name": { "ja": "エレナ", "en": "Elena" },
+    "favorite": false,
+    "league": "-1000",
+    "star": "1",
+    "ctrlType": {
+      "modern": false,
+      "classic": false
+    },
+    "active": false
+  },
   {
     "name": { "ja": "ランダム", "en": "RANDOM" },
     "favorite": false,
