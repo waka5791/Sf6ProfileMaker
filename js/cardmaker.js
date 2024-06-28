@@ -10,22 +10,6 @@
         let MessageBoxHeight = 180;//CharListColunNum 7 : 180 6のとき210
         let CardWidth = 1250;//CharListColunNum 7 : 1250、6 のとき1100、CharDataの長さが25以上になると考える
 
-        switch (CharListColumnNum) {
-            case 6:
-                MessageBoxHeight = 210;
-                CardWidth = 1100;
-                break;
-            case 7:
-                MessageBoxHeight = 175;
-                CardWidth = 1250;
-                break;
-            case 8:
-                MessageBoxHeight = 140;
-                CardWidth = 1400;
-                break;
-            default:
-                break;
-        }
 
         const PlayerName = 'PlayerName';
         const FightersId = 'FightersId';
@@ -42,12 +26,41 @@
         let VoiceChatArray = voicechat[0];
         let GenderArray = gender[0];
 
+        let IsUserDataUpdate = false;
+
         const bsMainContainer = 'container-fluid cursorDefault';
         const bsContainer = 'container cursorDefault inputInfo';
         const bsSubitem = 'm-1 rounded row p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3';
+
+        function AdjustCardSize() {
+            switch (CharListColumnNum) {
+                case 6:
+                    MessageBoxHeight = 210;
+                    CardWidth = 1100;
+                    break;
+                case 7:
+                    MessageBoxHeight = 175;
+                    CardWidth = 1250;
+                    break;
+                case 8:
+                    MessageBoxHeight = 140;
+                    CardWidth = 1400;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         function ImportParam(json) {
-            let _importJson = $('#ImportProfileData').val();
-            let _loadJson = JSON.parse(_importJson);
+            ToggleBadge($('#BtnExportProfile'), false);
+            IsUserDataUpdate = false;
+            let _loadJson = null;
+            if (json) {
+                _loadJson = json;
+            } else {
+                let _importJson = $('#ImportProfileData').val();
+                _loadJson = JSON.parse(_importJson);
+            }
 
             _XcharData = _loadJson[0].charData;
             userData = _loadJson[0].userData;
@@ -78,10 +91,12 @@
 
             charDataCopy = $.extend([], _newData);
             InitInputForm();
-            previewCard();
+            PreviewCard(false);
         }
 
         function ExportParam() {
+            ToggleBadge($('#BtnExportProfile'), false);
+            IsUserDataUpdate = false;
             function ClipboardCopy(_copyText, _msg) {
                 if (navigator.clipboard == undefined) {
                     window.clipboardData.setData('Text', _copyText);
@@ -103,16 +118,7 @@
                 }
                 alert(_msg);
             };
-            /*
-                        let _expData = '';
-                        _expData = `[{`;
-                        _expData += `"charData": ${JSON.stringify(charDataCopy)}`;
-                        _expData += `, "userData": ${JSON.stringify(userData)}`;
-                        _expData += `, "platform": [${JSON.stringify(PlatformArray)}]`;
-                        _expData += `, "voicechat": [${JSON.stringify(VoiceChatArray)}]`;
-                        _expData += `}]`;
-                        $('#ExportProfileData').val(_expData);
-                        */
+
             let _expJsonData = {};
             _expJsonData.charData = charDataCopy;
             _expJsonData.userData = userData;
@@ -122,17 +128,64 @@
             _copyText = `[${_copyText}]`;
             ClipboardCopy(_copyText, "クリップボードコピーしました。\r\nメモ帳などでファイルに保存してください。\r\n保存した内容を次回更新時にロードすることで再利用できます。");
 
-            //$('#ExportProfileData').val(_copyText);
+
         }
 
-        function addUpdateEvent(elem, type, id) {
+        function SetSample(isReset = false) {
+            [1, 3, 13, 17, 20, 21].forEach((_idx) => {
+                let _dmyChar = charDataCopy[_idx];
+                _dmyChar.favorite = !isReset;
+                if (_idx == 17) {
+                    _dmyChar.ctrlType.classic = !isReset;
+                } else {
+                    _dmyChar.ctrlType.modern = !isReset;
+                }
+                _dmyChar.league = isReset ? '-1000' : '0';
+            });
+
+            userData.PlayerName = isReset ? '' : 'サンプル';
+            userData.FightersId = isReset ? '' : '123456789';
+            userData.PlayTime = isReset ? '' : '21時～23時';
+            userData.ControlerType = isReset ? '' : 'パッド';
+            userData.MessageText = isReset ? '' : 'これはサンプルです。<><>よろしくお願いします。';
+
+            PlatformArray.steam = !isReset;
+            VoiceChatArray.discord = !isReset;
+        }
+
+        function ResetParam() {
+            SetSample(true);
+
+            let _expJsonData = {};
+            _expJsonData.charData = charDataCopy;
+            _expJsonData.userData = userData;
+            _expJsonData.platform = [PlatformArray];
+            _expJsonData.voicechat = [VoiceChatArray];
+            ImportParam([_expJsonData]);
+            $('#ImportProfileData').val('');
+        }
+
+        function LoadSample() {
+            SetSample();
+
+            let _expData = '';
+            _expData = `[{`;
+            _expData += `"charData": ${JSON.stringify(charDataCopy)}`;
+            _expData += `, "userData": ${JSON.stringify(userData)}`;
+            _expData += `, "platform": [${JSON.stringify(PlatformArray)}]`;
+            _expData += `, "voicechat": [${JSON.stringify(VoiceChatArray)}]`;
+            _expData += `}]`;
+            $('#ImportProfileData').val(_expData);
+        }
+
+        function AddUpdateEvent(elem, type, id) {
             elem.on(type, function (e) {
                 userData[id] = $(this).val();
-                previewCard();
+                PreviewCard(true);
             });
         }
 
-        function setTextInfo(id, title) {
+        function SetTextInfo(id, title) {
             let _container = $('<div>').addClass('TextInfo').addClass(bsContainer);
             let _xdiv = $('<div>').addClass(bsSubitem);
 
@@ -142,11 +195,11 @@
             _xdiv.append(_inputName);
             _container.append(_xdiv);
             _inputName.val(userData[id]);
-            addUpdateEvent(_inputName, 'input', id);
+            AddUpdateEvent(_inputName, 'input', id);
             wrap.append(_container);
         }
 
-        function setPlatformVC(title, _assortArray) {
+        function SetPlatformVC(title, _assortArray) {
             let _container = $('<div>').addClass(bsContainer);
             let _xdiv = $('<div>').addClass(bsSubitem);
 
@@ -168,7 +221,7 @@
                     let _isActive = _assortArray[_val];
                     _assortArray[_val] = !_isActive;
                     _assortArray[_val] ? $(this).addClass(_aClass) : $(this).removeClass(_aClass);
-                    previewCard();
+                    PreviewCard(true);
                 });
             });
             _xdiv.append(_platformDiv);
@@ -177,7 +230,7 @@
             wrap.append(_container);
         }
 
-        function getRankImage(idx, size = 's') {
+        function GetRankImage(idx, size = 's') {
             let _leagueNum = parseInt(charDataCopy[idx].league);
             let _ranknumber = _leagueNum + parseInt(charDataCopy[idx].star);
             if (_ranknumber < 0 || _leagueNum == NewChallengerNum) {
@@ -190,7 +243,7 @@
             return _leagueimgsrc;
         }
 
-        function getCharData(lang = "ja") {
+        function GetCharData(lang = "ja") {
             let _container = $('<div>').addClass(bsContainer);
             const xdivClass = 'm-1 p-1 rounded border text-gr flex-nowrap';
             for (let idx = 0; idx < charData.length; idx++) {
@@ -228,23 +281,23 @@
                     let _onoff = charDataCopy[idx].ctrlType.modern;
                     charDataCopy[idx].ctrlType.modern = !_onoff;
                     _modern.toggleClass('grayScale');
-                    previewCard();
+                    PreviewCard(true);
                 });
 
                 _classic.on('click', function (e) {
                     let _onoff = charDataCopy[idx].ctrlType.classic;
                     charDataCopy[idx].ctrlType.classic = !_onoff;
                     _classic.toggleClass('grayScale');
-                    previewCard();
+                    PreviewCard(true);
                 });
 
                 //リーグ
-                let _leagueimgsrc = getRankImage(idx);
+                let _leagueimgsrc = GetRankImage(idx);
                 let _leagueimg = $('<img>').attr({ 'src': `${_leagueimgsrc}` });
                 _leagueimg.css({ 'height': '48px', 'object-fit': 'contain' });
                 _leagueimg.attr('id', `leagueimg${idx}`);
 
-                _leagueElem = getLeague(idx);
+                _leagueElem = GetLeague(idx);
                 _leagueElem.attr('id', `league${idx}`);
 
                 if (!charDataCopy[idx].favorite) {
@@ -269,7 +322,7 @@
                         _ximg.addClass('grayScale');
                     }
                     charDataCopy[idx].favorite = _onoff;
-                    previewCard();
+                    PreviewCard(true);
                 });
 
                 _xdiv.addClass('row').css({ 'height': '64px' });
@@ -285,7 +338,7 @@
             wrap.append(_container);
         }
 
-        function getLeague(charidx, lang = 'en') {
+        function GetLeague(charidx, lang = 'en') {
             let _container = $('<div>');
             let _select = $('<select>');
             let _selectedIdx = null;
@@ -324,21 +377,21 @@
             _select.on('change', function (e) {
                 let _selectedIdx = $("option:selected", this).val();
                 charDataCopy[charidx].league = league[parseInt(_selectedIdx)].image;
-                $(`#leagueimg${charidx}`).attr('src', getRankImage(charidx));
+                $(`#leagueimg${charidx}`).attr('src', GetRankImage(charidx));
                 let _starsAry = league[parseInt(_selectedIdx)].star;
                 if (_starsAry.length > 0) {
                     _stars.show();
                 } else {
                     _stars.hide();
                 }
-                previewCard();
+                PreviewCard(true);
             });
 
             _stars.on('change', function (e) {
                 let _selectedIdx = $("option:selected", this).val();
                 charDataCopy[charidx].star = _selectedIdx;
-                $(`#leagueimg${charidx}`).attr('src', getRankImage(charidx));
-                previewCard();
+                $(`#leagueimg${charidx}`).attr('src', GetRankImage(charidx));
+                PreviewCard(true);
             });
 
             _container.append(_select);
@@ -347,23 +400,12 @@
             return _container;
         }
 
-        function previewCard() {
+        function PreviewCard(_isUpdate = false) {
+            if (_isUpdate && !IsUserDataUpdate ) {
+                ToggleBadge($('#BtnExportProfile'), true);
+                IsUserDataUpdate = true;
+            }
             function leftSide(cardImage) {
-                /*
-            <div class="col">
-                <div class="card fw-bold">
-                    <img src="./img/char/chunli.png" class="card-img grayScale" alt="...">
- 
-                    <div class="card-img-overlay">
-                        <div class="m-1 p-1 text-dark bg-white border border-success rounded">
-                            waka
-                        </div>
- 
-                    </div>
-                </div>
-            </div>
-                */
-
                 const cardClass = 'card m-2';
                 function getCard(title, body, id, isCenter = true) {
                     let _infoRow = $('<div>').addClass(cardClass);
@@ -567,7 +609,7 @@
                             _cardDiv.removeClass('bg-dark').addClass('border border-dark');
                         }
 
-                        _rankImg.attr({ 'src': getRankImage(idx, 'l') });
+                        _rankImg.attr({ 'src': GetRankImage(idx, 'l') });
 
                         if (charData.favorite) {
                             let _modernImg = $('<img>').addClass('card-img imgSmallType1');
@@ -665,32 +707,66 @@
             $('#ProfileCardMain').append(_container);
         }
 
-        $('#BtnImportProfile').on('click', function (e) {
-            ImportParam();
-        });
 
-        $('#BtnExportProfile').on('click', function (e) {
-            ExportParam();
-        });
 
         function InitInputForm() {
             PlatformArray = platform[0];
             VoiceChatArray = voicechat[0];
             $('.inputInfo').remove();
-            setTextInfo(PlayerName, 'プレイヤー名');
+            SetTextInfo(PlayerName, 'プレイヤー名');
             //setPlatformVC('性別', GenderArray);
-            setTextInfo(FightersId, 'ユーザコード');
+            SetTextInfo(FightersId, 'ユーザコード');
 
-            setTextInfo(PlayTime, 'プレイ時間帯');
-            setTextInfo(ControlerType, 'コントローラ');
-            setPlatformVC('プラットフォーム', PlatformArray);
-            setPlatformVC('ボイスチャット', VoiceChatArray)
-            setTextInfo(MessageText, 'コメント（改行：<>）');
-            getCharData();
+            SetTextInfo(PlayTime, 'プレイ時間帯');
+            SetTextInfo(ControlerType, 'コントローラ');
+            SetPlatformVC('プラットフォーム', PlatformArray);
+            SetPlatformVC('ボイスチャット', VoiceChatArray)
+            SetTextInfo(MessageText, 'コメント（改行：<>）');
+            GetCharData();
         }
 
+        function ToggleBadge(_btn, _onBadge = true) {
+            let _positionClass = 'position-relative';
+            if (_onBadge) {
+                _btn.addClass(_positionClass);
+                let _badgeSpan = $('<span>');
+                let _dmySpan = $('<span>');
+                _badgeSpan.addClass('position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle');
+                _dmySpan.addClass('visually-hidden');
+                _dmySpan.text('badge');
+                _badgeSpan.append(_dmySpan);
+                _btn.append(_badgeSpan);
+            } else {
+                _btn.removeClass(_positionClass);
+                _btn.children('span').remove();
+            }
+            return _btn;
+        }
+
+        function SetButtonEvent() {
+            $('#BtnImportProfile').on('click', function (e) {
+                ImportParam();
+            });
+
+            $('#BtnExportProfile').on('click', function (e) {
+                ExportParam();
+            });
+
+            $('#BtnParamReset').on('click', function (e) {
+                ResetParam();
+            });
+
+            $('#BtnExportSample').on('click', function (e) {
+                LoadSample();
+            });
+        }
+
+        SetButtonEvent();
+
+
+        AdjustCardSize();
         InitInputForm();
-        previewCard();
+        PreviewCard(false);
 
         /*
                 let test = $(".CaptureZone").get(0);
