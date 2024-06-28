@@ -36,14 +36,14 @@
     <script type="text/javascript" src="js/3rdparty/Capture-HTML-Elements-Screenshot/canvas2image.js"></script>
 -->
     <!-- Import Character Data -->
-    <script defer type="text/javascript" src="js/chardata.json.js?20240529-1"></script>
+    <script defer type="text/javascript" src="js/chardata.json.js?20240628-1"></script>
 
     <!--
     <script id="_CACHE_BUSTER_" src="js/cache-busting.js" charset="utf-8"></script>
   -->
 
     <link rel="stylesheet" href="css/main.css?20240402-1">
-    <script type="text/javascript" src="js/cardmaker.js?20240614-1"></script>
+    <script type="text/javascript" src="js/cardmaker.js?20240628-1"></script>
 </head>
 
 <body>
@@ -59,7 +59,7 @@
         <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#HowToUseModal">
             使い方
         </button>
-        <button type="button" class="btn btn-outline-success" id="BtnExportProfile">セーブ</button>
+        <button type="button" class="btn btn-outline-success m-1" id="BtnExportProfile">セーブ</button>
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
             data-bs-target="#LoadUserProfileModal">
             ロード
@@ -184,11 +184,16 @@
                                     <div class="mb-3">
                                         <label for="ImportProfileData"
                                             class="form-label">ロード：保存した内容を以下フォームにコピペして</label>
+                                            
+        （<button type="button" class="btn btn-outline-success" id="BtnExportSample">サンプル</button>）
                                         <textarea class="form-control p-3" spellcheck="false" id="ImportProfileData"
                                             rows="10"></textarea>
                                     </div>
                                 </div>
+
                                 <div class="mb-3 text-end">
+                                    <input class="btn btn-secondary" type="reset" id="BtnParamReset"value="リセット">
+
                                     <button type="button" class="btn btn-primary" id="BtnImportProfile">ロード</button>
                                 </div>
                             </div>
@@ -234,7 +239,7 @@
     </div>
 -->
     <div class="container">
-        <div class="text-end m-1" id="version">StreetFighter6 Profile Card Maker &copy waka / 20240614-1</div>
+        <div class="text-end m-1" id="version">StreetFighter6 Profile Card Maker &copy waka / 20240628-1</div>
     </div>
     <div id="SettingConsole"></div>
 </body>
