@@ -76,7 +76,7 @@
                 let _xidx = 0;
                 let _isExist = false;
                 while (_xidx < _XcharData.length) {
-                    if (_charData.name.ja == _XcharData[_xidx].name.ja) {
+                    if (_charData.name.ja == _XcharData[_xidx].name.ja && _XcharData[_xidx].active) {
                         _isExist = true;
                         _newData.push(_XcharData[_xidx]);
                         break;
