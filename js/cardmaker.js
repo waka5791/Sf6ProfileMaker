@@ -1,7 +1,7 @@
 (function ($) {
     const DebugMode = true;
     $.fn.sfProfile = function (options) {
-        const MasterRankNum = [36, 37, 100, 101, 102];
+        const MasterRankNum = [36, 37, 40, 41, 42];
         const LegendRankNum = [37];
         const NewChallengerNum = 39;
 
