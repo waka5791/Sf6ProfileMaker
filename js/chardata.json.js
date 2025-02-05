@@ -241,7 +241,7 @@ window.charData = [
     },
     "active": true
   },
-  
+
   {
     "name": { "ja": "ベガ", "en": "BISON", "file": "vega" },
     "favorite": false,
@@ -253,7 +253,7 @@ window.charData = [
     },
     "active": true
   },
-    
+
   {
     "name": { "ja": "テリーボガード", "en": "Terry" },
     "favorite": false,
@@ -265,7 +265,7 @@ window.charData = [
     },
     "active": true
   },
-    
+
   {
     "name": { "ja": "不知火舞", "en": "MAI" },
     "favorite": false,
@@ -275,9 +275,9 @@ window.charData = [
       "modern": false,
       "classic": false
     },
-    "active": false
+    "active": true
   },
-    
+
   {
     "name": { "ja": "エレナ", "en": "Elena" },
     "favorite": false,
@@ -360,6 +360,22 @@ window.league = [
     "star": [],
     "image": "36"
   },
+  {
+    "league": { "ja": "ハイマスター", "en": "HIGHMASTER" },
+    "star": [],
+    "image": "40"
+  },
+  {
+    "league": { "ja": "グランドマスター", "en": "GRANDMASTER" },
+    "star": [],
+    "image": "41"
+  },
+  {
+    "league": { "ja": "アルティメットマスター", "en": "ULTIMATEMASTER" },
+    "star": [],
+    "image": "42"
+  },
+
   {
     "league": { "ja": "レジェンド", "en": "LEGEND" },
     "star": [],
