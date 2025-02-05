@@ -1,8 +1,8 @@
 (function ($) {
     const DebugMode = true;
     $.fn.sfProfile = function (options) {
-        const MasterRankNum = 36;
-        const LegendRankNum = 37;
+        const MasterRankNum = [36, 37, 100, 101, 102];
+        const LegendRankNum = [37];
         const NewChallengerNum = 39;
 
 
@@ -236,7 +236,7 @@
             if (_ranknumber < 0 || _leagueNum == NewChallengerNum) {
                 _ranknumber = NewChallengerNum;
             }
-            if (_leagueNum == MasterRankNum || _leagueNum == LegendRankNum) {
+            if (MasterRankNum.includes(_leagueNum)) {
                 _ranknumber = _leagueNum;
             }
             let _leagueimgsrc = `./img/rank/rank${_ranknumber}_${size}.png`;
@@ -342,6 +342,7 @@
             let _container = $('<div>');
             let _select = $('<select>');
             let _selectedIdx = null;
+            let _stars = $('<select>');
             for (let idx = 0; idx < league.length; idx++) {
                 let _option = $('<option>');
                 _option.text(league[idx].league[lang]).val(idx);
@@ -351,8 +352,6 @@
                 }
                 _select.append(_option);
             }
-
-            let _stars = $('<select>');
             let _starsAry = [1, 2, 3, 4, 5];
             for (let idx = 0; idx < _starsAry.length; idx++) {
                 let _option = $('<option>');
@@ -362,10 +361,9 @@
                     _option.attr("selected", "selected");
                 }
             }
-
             if (_selectedIdx) {
                 _starsAry = league[parseInt(_selectedIdx)].star;
-                if (_starsAry.length > 0) {
+                if (_starsAry.length == 5) {
                     _stars.show();
                 } else {
                     _stars.hide();
@@ -379,7 +377,7 @@
                 charDataCopy[charidx].league = league[parseInt(_selectedIdx)].image;
                 $(`#leagueimg${charidx}`).attr('src', GetRankImage(charidx));
                 let _starsAry = league[parseInt(_selectedIdx)].star;
-                if (_starsAry.length > 0) {
+                if (_starsAry.length == 5) {
                     _stars.show();
                 } else {
                     _stars.hide();
@@ -401,7 +399,7 @@
         }
 
         function PreviewCard(_isUpdate = false) {
-            if (_isUpdate && !IsUserDataUpdate ) {
+            if (_isUpdate && !IsUserDataUpdate) {
                 ToggleBadge($('#BtnExportProfile'), true);
                 IsUserDataUpdate = true;
             }
