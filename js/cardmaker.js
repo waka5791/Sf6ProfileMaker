@@ -7,9 +7,12 @@
 
 
         const CharListColumnNum = 7;
-        let MessageBoxHeight = 180;//CharListColunNum 7 : 180 6のとき210
-        let CardWidth = 1250;//CharListColunNum 7 : 1250、6 のとき1100、CharDataの長さが25以上になると考える
+        let MessageBoxHeight = 180;//CharListColumnNum 7 : 180 6のとき210
+        let CardWidth = 1250;//CharListColumnNum 7 : 1250、6 のとき1100、CharDataの長さが25以上になると考える
+        let LeftSideColumn = 6;
 
+        let MFOn = false;
+        let MostFavoriteChar = null;
 
         const PlayerName = 'PlayerName';
         const FightersId = 'FightersId';
@@ -43,8 +46,11 @@
                     CardWidth = 1250;
                     break;
                 case 8:
-                    MessageBoxHeight = 140;
-                    CardWidth = 1400;
+                    //MessageBoxHeight = 140;
+                    //CardWidth = 1400;
+                    MessageBoxHeight = 200;
+                    CardWidth = 1200;
+                    LeftSideColumn = 5;
                     break;
                 default:
                     break;
@@ -230,9 +236,35 @@
             wrap.append(_container);
         }
 
+        function GetCharImage(charData, profile = "") {
+            let _charImg = $('<img>');
+            let _img = charData.name['en'].toLowerCase() + '.png';
+            if (charData.name.file) {
+                _img = charData.name.file + '.png';
+            }
+            if (!charData.active) {
+                _img = 'random.png';
+            }
+            _charImg.attr({ 'src': `./img/char/${profile}${_img}` });
+            return _charImg;
+        }
+
         function GetRankImage(idx, size = 's') {
             let _leagueNum = parseInt(charDataCopy[idx].league);
             let _ranknumber = _leagueNum + parseInt(charDataCopy[idx].star);
+            if (_ranknumber < 0 || _leagueNum == NewChallengerNum) {
+                _ranknumber = NewChallengerNum;
+            }
+            if (MasterRankNum.includes(_leagueNum)) {
+                _ranknumber = _leagueNum;
+            }
+            let _leagueimgsrc = `./img/rank/rank${_ranknumber}_${size}.png`;
+            return _leagueimgsrc;
+        }
+
+        function GetRankImageByData(charData, size = 's') {
+            let _leagueNum = parseInt(charData.league);
+            let _ranknumber = _leagueNum + parseInt(charData.star);
             if (_ranknumber < 0 || _leagueNum == NewChallengerNum) {
                 _ranknumber = NewChallengerNum;
             }
@@ -307,6 +339,7 @@
                 }
 
                 charDataCopy[idx].favorite ? _ximg.removeClass('grayScale') : _ximg.addClass('grayScale');
+
                 _chkbox.on('click', function (e) {
                     $(`#leagueimg${idx}`).visibilityToggle();
                     $(`#league${idx}`).visibilityToggle();
@@ -322,6 +355,12 @@
                         _ximg.addClass('grayScale');
                     }
                     charDataCopy[idx].favorite = _onoff;
+
+                    if (_onoff) {
+                        MostFavoriteChar = charDataCopy[idx];
+                    }
+
+
                     PreviewCard(true);
                 });
 
@@ -403,7 +442,8 @@
                 ToggleBadge($('#BtnExportProfile'), true);
                 IsUserDataUpdate = true;
             }
-            function leftSide(cardImage) {
+            function leftSide(favchar = null) {
+                const cardImage = './img/logo.png';
                 const cardClass = 'card m-2';
                 function getCard(title, body, id, isCenter = true) {
                     let _infoRow = $('<div>').addClass(cardClass);
@@ -488,13 +528,12 @@
                     }
                     return _infoRow;
                 }
-                let _xdiv = $('<div>').addClass('col').attr({ 'id': 'ProfileCardLeft' });
+                let _xdiv = $('<div>').addClass(`col-${LeftSideColumn}`).attr({ 'id': 'ProfileCardLeft' });
 
                 let _cardDiv = $('<div>').addClass('card fw-bold m-1 bg-dark').attr({ 'id': 'ProfileCardLeftInner' });
                 let _backImg = $('<img>').addClass('card-img m-1');
                 let _cardOverlay = $('<div>').addClass('card-img-overlay');
-                _backImg.attr({ 'src': cardImage });
-
+                //
                 let _cardRow = $('<div>').addClass('row');
                 let _cardCol1 = $('<div>').addClass('col');
                 let _cardCol2 = $('<div>').addClass('col');
@@ -521,17 +560,41 @@
                     _cardCol2.append(getPlatform('ボイスチャット', VoiceChatArray));
                     _cardOverlay.append(_cardRow);
                 }
-
                 _cardDiv.append(_cardOverlay.removeClass('card-img-overlay'));
-
                 let _imageRow = $('<div>').addClass('row');
-                let _imageX = $('<div>').addClass('col');
-                let _imageY = $('<div>').addClass('col-8');
-                let _imageZ = $('<div>').addClass('col');
-                _imageY.append(_backImg);
-                _imageRow.append(_imageX).append(_imageY).append(_imageZ);
-
                 _cardDiv.append(_imageRow);
+                _imageRow.css({ height: 240 });
+                if (true) {
+                    _cdivCss = {};
+                    _cdivCss.backgroundRepeat = 'no-repeat';
+                    if (MostFavoriteChar != null && MFOn) {
+                        let _favCharImg = GetCharImage(MostFavoriteChar, 'profile_');
+                        //let _favCharImg = GetCharImage(MostFavoriteChar);
+                        let _favCharImgSrc = _favCharImg.attr("src");
+                        _cdivCss.backgroundImage = `url("${_favCharImgSrc}")`;
+                        _cdivCss.backgroundSize = `50%`;
+                        _cdivCss.backgroundPosition = `60% 35%`;
+
+                        let _fakeDiv = $('<div>');
+                        _imageRow.append(_fakeDiv);
+                        let _fdivCss = {};
+                        _fdivCss.backgroundRepeat = 'no-repeat';
+                        
+                        _fdivCss.backgroundImage = `url("${GetRankImageByData(MostFavoriteChar)}")`;
+                        _fdivCss.backgroundSize = `20%`;
+                        _fdivCss.backgroundPosition = `20% 100%`;
+                        _fakeDiv.css(_fdivCss);
+                    } else {
+                        _cdivCss.backgroundImage = `url("${cardImage}")`;
+                        _cdivCss.backgroundSize = `100%`;
+                        _cdivCss.backgroundPosition = `50% 27%`;
+                    }
+                    _cardDiv.css(_cdivCss);
+                } else {
+                    _backImg.attr({ 'src': cardImage });
+                    //_imageY.append(_backImg);
+                    //_imageRow.append(_imageX).append(_imageY).append(_imageZ);
+                }
                 {
                     _cardRow = $('<div>').addClass('row');
                     _cardCol1 = $('<div>').addClass('col');
@@ -543,6 +606,7 @@
                     _cardCol2.append(getCard('コントローラ', $(`#${ControlerType}`).val(), 'ProfileControlerType'));
                     _cardDiv.append(_cardRow);
                 }
+
                 {
                     _cardRow = $('<div>').addClass('row');
                     _cardCol1 = $('<div>').addClass('col');
@@ -555,6 +619,7 @@
 
                     _cardDiv.append(_cardRow);
                 }
+
 
                 _xdiv.append(_cardDiv);
                 return _xdiv;
@@ -585,6 +650,7 @@
                     const grayBgColor = 'bg-secondary';
 
                     if (charData) {
+                        /*
                         let _img = charData.name['en'].toLowerCase() + '.png';
                         if (charData.name.file) {
                             _img = charData.name.file + '.png';
@@ -593,6 +659,8 @@
                             _img = 'random.png';
                         }
                         _charImg.attr({ 'src': `./img/char/${_img}` });
+                        */
+                        _charImg = GetCharImage(charData).addClass('card-img');
                         if (!charData.active) {
                             //  _cardDiv.removeClass('bg-dark');
                             _charImg.addClass('grayScale');
@@ -683,13 +751,12 @@
                 return _xdiv;
             }
 
-            const cardImage = './img/logo.png';
             $('#ProfileCard').remove();
             let _container = $('<div>').attr('id', 'ProfileCard');
             _container.addClass(bsMainContainer);
             _container.css({ width: CardWidth });
 
-            let _leftDiv = leftSide(cardImage);
+            let _leftDiv = leftSide();
             let _rightDiv = rightSide();
 
             let _xdiv = $('<div>').addClass('row border border-dark rounded p-1 m-1');
@@ -756,6 +823,11 @@
 
             $('#BtnExportSample').on('click', function (e) {
                 LoadSample();
+            });
+
+            $('#claimCharcter').change(function() {
+                MFOn = this.checked;
+                PreviewCard(true);
             });
         }
 
