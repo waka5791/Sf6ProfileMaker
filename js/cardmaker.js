@@ -568,8 +568,8 @@
                     _cdivCss = {};
                     _cdivCss.backgroundRepeat = 'no-repeat';
                     if (MostFavoriteChar != null && MFOn) {
-                        //let _favCharImg = GetCharImage(MostFavoriteChar, 'profile_');
-                        let _favCharImg = GetCharImage(MostFavoriteChar);
+                        let _favCharImg = GetCharImage(MostFavoriteChar, 'profile_');
+                        //let _favCharImg = GetCharImage(MostFavoriteChar);
                         let _favCharImgSrc = _favCharImg.attr("src");
                         _cdivCss.backgroundImage = `url("${_favCharImgSrc}")`;
                         _cdivCss.backgroundSize = `50%`;
