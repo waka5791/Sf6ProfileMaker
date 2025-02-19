@@ -36,18 +36,18 @@
     <script type="text/javascript" src="js/3rdparty/Capture-HTML-Elements-Screenshot/canvas2image.js"></script>
 -->
     <!-- Import Character Data -->
-    <script defer type="text/javascript" src="js/chardata.json.js?20250205-1"></script>
+    <script defer type="text/javascript" src="js/chardata.json.js?20250219-1"></script>
 
     <!--
     <script id="_CACHE_BUSTER_" src="js/cache-busting.js" charset="utf-8"></script>
   -->
 
     <link rel="stylesheet" href="css/main.css?20240402-1">
-    <script type="text/javascript" src="js/cardmaker.js?20250205-1"></script>
+    <script type="text/javascript" src="js/cardmaker.js?20250219-1"></script>
 </head>
 
 <body>
-    <h1 class="text-center border border-3 border-secondary rounded  p-1 m-1 fw-bold">StreetFighter6 Profile Card Maker
+    <h1 class="text-center border border-3 border-secondary rounded p-1 m-1 fw-bold">StreetFighter6 Profile Card Maker
     </h1>
     <!-- Button trigger modal -->
     <div class=" m-3 text-center">
@@ -64,6 +64,7 @@
             data-bs-target="#LoadUserProfileModal">
             ロード
         </button>
+
     </div>
     <!-- Modal -->
     <div class="modal fade" id="HowToUseModal" tabindex="-1" aria-labelledby="HowToUseModalLabel" aria-hidden="true">
@@ -154,6 +155,12 @@
                     <section>（このウインドウの閉じ方：☓、Closeボタン、このウインドウの外側いずれかをクリック）</section>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <p class="m-2 form-check form-switch cursorDefault">
+                    <input class="form-check-input" type="checkbox" value="" id="claimCharcter">
+                    <label class="modal-title fs-5 form-check-label" for="claimCharcter">
+                        最後に選んだキャラを左に表示（※ロード使用時、この設定は反映されないためロード後キャラ選択を行ってください）
+                    </label>
+                </p>
                 <div class="modal-body">
                     <div id="sfprofile"></div>
                 </div>
@@ -184,15 +191,16 @@
                                     <div class="mb-3">
                                         <label for="ImportProfileData"
                                             class="form-label">ロード：保存した内容を以下フォームにコピペして</label>
-                                            
-        （<button type="button" class="btn btn-outline-success" id="BtnExportSample">サンプル</button>）
+
+                                        （<button type="button" class="btn btn-outline-success"
+                                            id="BtnExportSample">サンプル</button>）
                                         <textarea class="form-control p-3" spellcheck="false" id="ImportProfileData"
                                             rows="10"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="mb-3 text-end">
-                                    <input class="btn btn-secondary" type="reset" id="BtnParamReset"value="リセット">
+                                    <input class="btn btn-secondary" type="reset" id="BtnParamReset" value="リセット">
 
                                     <button type="button" class="btn btn-primary" id="BtnImportProfile">ロード</button>
                                 </div>
@@ -239,7 +247,7 @@
     </div>
 -->
     <div class="container">
-        <div class="text-end m-1" id="version">StreetFighter6 Profile Card Maker &copy waka / 20250205-1</div>
+        <div class="text-end m-1" id="version">StreetFighter6 Profile Card Maker &copy waka / 20250219-1</div>
     </div>
     <div id="SettingConsole"></div>
 </body>
