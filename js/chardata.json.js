@@ -121,7 +121,7 @@ window.charData = [
     "active": true
   },
   {
-    "name": { "ja": "ディージェイ", "en": "DEE JAY", "file": "dj" },
+    "name": { "ja": "ディージェイ", "en": "DEE JAY", "file": "deejay" },
     "favorite": false,
     "league": "-1000",
     "star": "1",
