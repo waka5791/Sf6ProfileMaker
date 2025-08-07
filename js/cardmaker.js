@@ -6,7 +6,7 @@
         const NewChallengerNum = 39;
 
 
-        const CharListColumnNum = 7;
+        const CharListColumnNum = 8;
         let MessageBoxHeight = 180;//CharListColumnNum 7 : 180 6のとき210
         let CardWidth = 1250;//CharListColumnNum 7 : 1250、6 のとき1100、CharDataの長さが25以上になると考える
         let LeftSideColumn = 6;
@@ -48,9 +48,9 @@
                 case 8:
                     //MessageBoxHeight = 140;
                     //CardWidth = 1400;
-                    MessageBoxHeight = 200;
-                    CardWidth = 1200;
-                    LeftSideColumn = 5;
+                    MessageBoxHeight = 174;
+                    CardWidth = 1400;
+                    LeftSideColumn = 6;
                     break;
                 default:
                     break;

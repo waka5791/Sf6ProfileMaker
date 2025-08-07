@@ -287,8 +287,19 @@ window.charData = [
       "modern": false,
       "classic": false
     },
-    "active": false
-  },
+    "active": true
+    },
+    {
+        "name": { "ja": "サガット", "en": "Sagat" },
+        "favorite": false,
+        "league": "-1000",
+        "star": "1",
+        "ctrlType": {
+            "modern": false,
+            "classic": false
+        },
+        "active": true
+    },
   {
     "name": { "ja": "ランダム", "en": "RANDOM" },
     "favorite": false,
