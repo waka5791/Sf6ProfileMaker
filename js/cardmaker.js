@@ -46,9 +46,7 @@
                     CardWidth = 1250;
                     break;
                 case 8:
-                    //MessageBoxHeight = 140;
-                    //CardWidth = 1400;
-                    MessageBoxHeight = 174;
+                    MessageBoxHeight = 145;
                     CardWidth = 1400;
                     LeftSideColumn = 6;
                     break;
@@ -563,7 +561,8 @@
                 _cardDiv.append(_cardOverlay.removeClass('card-img-overlay'));
                 let _imageRow = $('<div>').addClass('row');
                 _cardDiv.append(_imageRow);
-                _imageRow.css({ height: 240 });
+                let _imageH = 270;//240
+                _imageRow.css({ height: _imageH });
                 if (true) {
                     _cdivCss = {};
                     _cdivCss.backgroundRepeat = 'no-repeat';
@@ -573,7 +572,7 @@
                         let _favCharImgSrc = _favCharImg.attr("src");
                         _cdivCss.backgroundImage = `url("${_favCharImgSrc}")`;
                         _cdivCss.backgroundSize = `50%`;
-                        _cdivCss.backgroundPosition = `60% 35%`;
+                        _cdivCss.backgroundPosition = `60% 40%`;
 
                         let _fakeDiv = $('<div>');
                         _imageRow.append(_fakeDiv);

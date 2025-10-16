@@ -300,6 +300,17 @@ window.charData = [
         },
         "active": true
     },
+    {
+        "name": { "ja": "C.ヴァイパー", "en": "CViper" },
+        "favorite": false,
+        "league": "-1000",
+        "star": "1",
+        "ctrlType": {
+            "modern": false,
+            "classic": false
+        },
+        "active": true
+    },
   {
     "name": { "ja": "ランダム", "en": "RANDOM" },
     "favorite": false,
